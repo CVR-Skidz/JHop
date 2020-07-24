@@ -7,7 +7,10 @@ package com.cvrskidz.jhop;
 import java.util.List;
 
 /**
- *
+ * Provides an executable behavior to a JHop program, identifying the 
+ * operation to perform as specified by the supplied 
+ * name.
+ * 
  * @author cvr-skidz bcc9954 18031335
  */
 public abstract class Operation implements Executable{
@@ -16,12 +19,27 @@ public abstract class Operation implements Executable{
     private boolean error;
     protected String name;
     
+    /**
+     * Default Operation constructor.
+     */
     public Operation() {
         argv = null;
         error = false;
         name = null;
     }
     
+    /**
+     * Constructs an Operation object. This constructor is required to be 
+     * invoked to provide a functional Operation.
+     * 
+     * <p><strong>This constructor is not intended to be invoked manually.</strong>
+     * Use {@link com.cvrskidz.jhop.Operation#OpFactory} instead.
+     * 
+     * @param argv Arguments supplied to the operation.
+     * @param name Operation name. Must be a valid operation as specified by 
+     * the JHop program (see jhop usage).
+     * 
+     */
     public Operation(List<String> argv, String name) {
         super();
         this.argv = argv;
@@ -29,6 +47,14 @@ public abstract class Operation implements Executable{
         this.name = name;
     }
     
+    /**
+     * Constructs an appropriate Operation based on the supplied operation name. 
+     * Or a null reference when supplied an invalid operation.
+     * 
+     * @param call The operation name.
+     * @param argv The operation arguments.
+     * @return  A new Operation or null if supplied an invalid call.
+     */
     public static Operation OpFactory(String call, List<String> argv) {
         switch(call) {
             case Searcher.OPNAME:
@@ -52,14 +78,29 @@ public abstract class Operation implements Executable{
         return error;
     }
     
+    /**
+     * "Gets" the argument count of this object. 
+     * 
+     * @return The number of arguments held by the operation.
+     */
     public int getArgc() {
         return argc;
     }
 
+    /**
+     * "Gets" the arguments of this object. 
+     * 
+     * @return The arguments held by the operation.
+     */
     public List<String> getArgv() {
         return argv;
     }
 
+    /**
+     * "Gets" the operation name of this object. 
+     * 
+     * @return The name held by the operation.
+     */
     public String getName() {
         return name;
     }

@@ -13,9 +13,6 @@ public class JHop {
     public static void main(String[] args) {
         ArgumentParser parser = new ArgumentParser(args);
         parser.parse();
-        for(Operation op: parser.getOperations()) {
-            System.out.println(op);
-            op.exec();
-        }
+        for(Operation op: parser.getOperations()) op.exec();
     }
 }

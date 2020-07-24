@@ -6,10 +6,24 @@
 package com.cvrskidz.jhop;
 
 /**
- *
+ * An object that can be executed. A user of this interface specifies the exact
+ * functionality of the `exec` method. 
+ * <p> Any object executing the instance implementing this interface can 
+ * guarantee the behavior is invoked as intended by the class in question.
+ * <p> Any object executing the instance implementing this interface can retrieve
+ * an error message after calling `exec` without raising an exception.
+ * 
  * @author cvr-skidz bcc9954 18031335
  */
 public interface Executable {
+    /**
+     * Execute the intended functionality of this instance.
+     */
     public void exec();
+    
+    /**
+     * Retrieve any errors that occurred whilst executing this instance.
+     * @return true if an error occurred, false otherwise.
+     */
     public boolean getError();
 }

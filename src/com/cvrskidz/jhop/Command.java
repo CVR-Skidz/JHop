@@ -6,7 +6,8 @@
 package com.cvrskidz.jhop;
 
 /**
- *
+ * TODO
+ * 
  * @author cvr-skidz bcc9954 18031335
  */
 public class Command implements Executable{
