@@ -12,11 +12,13 @@ import java.util.List;
  */
 public class Searcher extends Operation{
     public final static String OPNAME = "--search";
+    private final static int PRIORITY = 2;
     protected String term;
     
     public Searcher(List<String> argv) {
         super(argv, OPNAME);
         this.term = argv.get(0);
+        this.priority = PRIORITY;
     }
     
     @Override

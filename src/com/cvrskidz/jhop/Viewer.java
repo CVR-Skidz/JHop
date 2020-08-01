@@ -12,10 +12,12 @@ import java.util.List;
  */
 public class Viewer extends Searcher{
     public static final String OPNAME = "--show";
+    private final static int PRIORITY = 2;
     
     public Viewer(List<String> argv) {
         super(argv);
         this.name = OPNAME;
+        this.priority = PRIORITY;
     }
     
     @Override

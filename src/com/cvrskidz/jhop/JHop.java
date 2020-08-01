@@ -5,6 +5,9 @@
  */
 package com.cvrskidz.jhop;
 
+import com.cvrskidz.jhop.exceptions.CommandMismatchException;
+import com.cvrskidz.jhop.exceptions.CommandNotFoundException;
+
 /**
  *
  * @author cvr-skidz bcc9954 18031335
@@ -12,7 +15,14 @@ package com.cvrskidz.jhop;
 public class JHop {
     public static void main(String[] args) {
         ArgumentParser parser = new ArgumentParser(args);
-        parser.parse();
-        for(Operation op: parser.getOperations()) op.exec();
+        try{
+            parser.parse();
+            Operation[] ops = parser.getOperations().toArray(new Operation[0]);
+            Command command = new Command(ops);
+            command.safeExec();
+        }
+        catch(CommandNotFoundException | CommandMismatchException e) {
+            System.err.println(e.getMessage());
+        }
     }
 }

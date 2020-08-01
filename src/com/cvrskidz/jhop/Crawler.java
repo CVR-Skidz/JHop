@@ -12,11 +12,13 @@ import java.util.List;
  */
 public class Crawler extends Operation{
     public static final String OPNAME = "--crawl";
+    public static final int PRIORITY = 1;
     private String source;
     
     public Crawler(List<String> argv) {
         super(argv, OPNAME);
-        source = argv.get(0);
+        this.source = argv.get(0);
+        this.priority = PRIORITY;
     }
     
     @Override

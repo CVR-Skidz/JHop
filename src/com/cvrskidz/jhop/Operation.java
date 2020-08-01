@@ -14,10 +14,14 @@ import java.util.List;
  * @author cvr-skidz bcc9954 18031335
  */
 public abstract class Operation implements Executable{
+    //The  priority of commands that do not allow other commands to be used in the same call
+    public final static int MASTER_PR = -1; 
+    
     private int argc;
     private List<String> argv;
     private boolean error;
     protected String name;
+    protected int priority;
     
     /**
      * Default Operation constructor.
@@ -26,6 +30,7 @@ public abstract class Operation implements Executable{
         argv = null;
         error = false;
         name = null;
+        priority = -1;
     }
     
     /**
@@ -103,6 +108,15 @@ public abstract class Operation implements Executable{
      */
     public String getName() {
         return name;
+    }
+    
+    /**
+     * "Gets" the operation priority of this object.
+     * 
+     * @return The priority held by the operation.
+     */
+    public int getPriority() {
+        return priority;
     }
     
     @Override

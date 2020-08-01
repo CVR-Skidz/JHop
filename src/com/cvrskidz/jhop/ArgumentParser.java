@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.cvrskidz.jhop;
+import com.cvrskidz.jhop.exceptions.CommandNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +51,9 @@ public class ArgumentParser {
      * a JHop program after this object is instantiated.
      * 
      * @see com.cvrskidz.jhop.Operation
+     * @throws com.cvrskidz.jhop.exceptions.CommandNotFoundException
      */
-    public void parse() {
+    public void parse() throws CommandNotFoundException{
         operations = new ArrayList<>(); 
         List<String> args = new ArrayList<>();
         String opName = null;
@@ -84,9 +86,12 @@ public class ArgumentParser {
      * @return A new Operation.
      * @see com.cvrskidz.jhop.Operation
      */
-    private Operation opHelper(String call, List<String> args) {
+    private Operation opHelper(String call, List<String> args) 
+            throws CommandNotFoundException{
         List<String> argsCopy = new ArrayList<>(args);
-        return Operation.OpFactory(call, argsCopy);
+        Operation op = Operation.OpFactory(call, argsCopy);
+        if(op == null) throw new CommandNotFoundException(call, args);
+        return op;
     }
     
     /**
