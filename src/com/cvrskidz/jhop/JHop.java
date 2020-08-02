@@ -7,6 +7,7 @@ package com.cvrskidz.jhop;
 
 import com.cvrskidz.jhop.exceptions.CommandMismatchException;
 import com.cvrskidz.jhop.exceptions.CommandNotFoundException;
+import com.cvrskidz.jhop.exceptions.InvalidArgumentException;
 
 /**
  *
@@ -21,7 +22,7 @@ public class JHop {
             Command command = new Command(ops);
             command.safeExec();
         }
-        catch(CommandNotFoundException | CommandMismatchException e) {
+        catch(Exception e) {
             System.err.println(e.getMessage());
         }
     }

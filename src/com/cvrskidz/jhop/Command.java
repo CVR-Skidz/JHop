@@ -17,58 +17,52 @@ public class Command implements Executable{
     
     private Operation[] operations;
     private boolean error;
-    private int[] location;
+    private Exception errorException;
     
     public Command(Operation[] operations) {
         error = false;
         this.operations = operations;
-        this.location = new int[2];
     }
     
-    public void safeExec() throws CommandMismatchException{
+    public void safeExec() throws Exception{
         exec();
         
-        if(error) {
-            String callA = operations[location[0]].getName();
-            String callB = operations[location[1]].getName();
-            throw new CommandMismatchException(callA, callB);
-        }
+        if(error) throw errorException;
     }
     
     @Override
     public void exec(){
         sort();
         
-        //check for invalid combinations
-        for(int i = 0; i < operations.length; ++i) {
-            int prA = operations[i].getPriority();
-            for(int j = i+1; j < operations.length; ++j) {
-                if(prA == operations[j].getPriority()) {
-                    this.location[0] = j;
-                    this.location[1] = i;
-                    error = true;
-                    return;
-                }
-            }
+        CommandMismatchException mismatch = validatePriority();
+        if(mismatch != null) {
+            setError(mismatch);
+            return;
         }
         
-        //check for special commands
-        int index = containsPriority(Operation.MASTER_PR);
-        if( index >= 0 && operations.length > 1) {
-            location[0] = index;
-            location[1] = index == operations.length-1 ? index - 1 : index + 1;
-            error = true;
+        mismatch = validateSpecialPriority();
+        if(mismatch != null) {
+            setError(mismatch);
             return;
         }
         
         for(Operation o: operations) {
             o.exec();
+            if(!o.success()) {
+                setError(o);
+                return;
+            }
         }
     }
     
     @Override
-    public boolean getError() {
-        return error;
+    public Exception getError() {
+        return errorException;
+    }
+    
+    @Override
+    public boolean success(){
+        return !error;
     }
     
     /**
@@ -92,11 +86,48 @@ public class Command implements Executable{
         }
     }
     
+    private CommandMismatchException validatePriority() {
+        for(int i = 0; i < operations.length; ++i) {
+            Operation a = operations[i];
+            for(int j = i+1; j < operations.length; ++j) {
+                Operation b = operations[j];
+                if(a.getPriority() == b.getPriority()) {
+                    return new CommandMismatchException(a.getName(), b.getName());
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    private CommandMismatchException validateSpecialPriority() {
+        int indexA = containsPriority(Operation.MASTER_PR);
+        if( indexA >= 0 && operations.length > 1) {
+            int indexB = indexA == operations.length-1 ? indexA - 1 : indexA + 1;
+
+            String a = operations[indexA].getName();
+            String b = operations[indexB].getName();
+            return new CommandMismatchException(a, b);
+        }
+        
+        return null;
+    } 
+    
     private int containsPriority(int p) {
         for(int i = 0; i < operations.length; ++i) {
             if(operations[i].getPriority() == p) return i;
         }
         
         return -1;
+    }
+    
+    private void setError(Operation o) {
+        error = true;
+        errorException = o.getError();
+    }
+    
+    private void setError(Exception e) {
+        error = true;
+        errorException = e;
     }
 }

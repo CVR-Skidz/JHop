@@ -23,7 +23,9 @@ public interface Executable {
     
     /**
      * Retrieve any errors that occurred whilst executing this instance.
-     * @return true if an error occurred, false otherwise.
+     * @return An Exception if an error occurred, null otherwise.
      */
-    public boolean getError();
+    public Exception getError();
+    
+    public boolean success();
 }

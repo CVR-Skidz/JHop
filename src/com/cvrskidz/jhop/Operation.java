@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package com.cvrskidz.jhop;
+import com.cvrskidz.jhop.exceptions.InvalidArgumentException;
 import java.util.List;
 
 /**
@@ -17,9 +18,10 @@ public abstract class Operation implements Executable{
     //The  priority of commands that do not allow other commands to be used in the same call
     public final static int MASTER_PR = -1; 
     
-    private int argc;
-    private List<String> argv;
-    private boolean error;
+    protected int argc;
+    protected List<String> argv;
+    protected boolean error;
+    protected Exception errorException;
     protected String name;
     protected int priority;
     
@@ -60,7 +62,10 @@ public abstract class Operation implements Executable{
      * @param argv The operation arguments.
      * @return  A new Operation or null if supplied an invalid call.
      */
-    public static Operation OpFactory(String call, List<String> argv) {
+    public static Operation OpFactory(String call, List<String> argv) 
+            throws InvalidArgumentException{
+        if(argv.isEmpty()) throw new InvalidArgumentException();
+        
         switch(call) {
             case Searcher.OPNAME:
                 return new Searcher(argv); 
@@ -79,8 +84,13 @@ public abstract class Operation implements Executable{
     }
     
     @Override
-    public boolean getError(){
-        return error;
+    public Exception getError(){
+        return errorException;
+    }
+    
+    @Override
+    public boolean success(){
+        return !error;
     }
     
     /**
@@ -117,6 +127,11 @@ public abstract class Operation implements Executable{
      */
     public int getPriority() {
         return priority;
+    }
+    
+    protected void setError(Exception e) {
+        this.error = true;
+        this.errorException = e;
     }
     
     @Override

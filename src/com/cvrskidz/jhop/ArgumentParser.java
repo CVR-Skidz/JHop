@@ -5,6 +5,7 @@
  */
 package com.cvrskidz.jhop;
 import com.cvrskidz.jhop.exceptions.CommandNotFoundException;
+import com.cvrskidz.jhop.exceptions.InvalidArgumentException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class ArgumentParser {
      * @see com.cvrskidz.jhop.Operation
      * @throws com.cvrskidz.jhop.exceptions.CommandNotFoundException
      */
-    public void parse() throws CommandNotFoundException{
+    public void parse() throws CommandNotFoundException, InvalidArgumentException{
         operations = new ArrayList<>(); 
         List<String> args = new ArrayList<>();
         String opName = null;
@@ -87,7 +88,7 @@ public class ArgumentParser {
      * @see com.cvrskidz.jhop.Operation
      */
     private Operation opHelper(String call, List<String> args) 
-            throws CommandNotFoundException{
+            throws CommandNotFoundException, InvalidArgumentException{
         List<String> argsCopy = new ArrayList<>(args);
         Operation op = Operation.OpFactory(call, argsCopy);
         if(op == null) throw new CommandNotFoundException(call, args);
