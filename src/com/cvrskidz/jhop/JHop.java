@@ -23,6 +23,8 @@ public class JHop {
             command.safeExec();
         }
         catch(Exception e) {
+            System.err.println("An error occured:");
+            e.printStackTrace();
             System.err.println(e.getMessage());
         }
     }
