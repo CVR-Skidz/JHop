@@ -5,10 +5,6 @@
  */
 package com.cvrskidz.jhop;
 
-import com.cvrskidz.jhop.exceptions.CommandMismatchException;
-import com.cvrskidz.jhop.exceptions.CommandNotFoundException;
-import com.cvrskidz.jhop.exceptions.InvalidArgumentException;
-
 /**
  *
  * @author cvr-skidz bcc9954 18031335
@@ -23,9 +19,8 @@ public class JHop {
             command.safeExec();
         }
         catch(Exception e) {
-            System.err.println("An error occured:");
-            e.printStackTrace();
-            System.err.println(e.getMessage());
+            System.err.println("**ERROR** " + e.getMessage());
+//            e.printStackTrace();
         }
     }
 }

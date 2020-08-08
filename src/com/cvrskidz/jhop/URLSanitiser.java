@@ -21,31 +21,32 @@ public final class URLSanitiser {
         this.src = src;
     }
         
-    public String sanitise() {
+    public String sanitise() throws IndexOutOfBoundsException{
         String protocol = getProtocol(url);
+        String path = "", sanitizedURL = ""; 
         boolean host = hasHost(url, protocol);
-        String fullPath = absoluteURL(protocol, host);
         
-        protocol = getProtocol(fullPath);
-        String shortenedURL = descend(fullPath.substring(protocol.length()));
-        return protocol + shortenedURL;
-    }
-    
-    private String absoluteURL(String protocol, boolean hostPresent) {
-        StringBuilder out = new StringBuilder();
+        path = protocol.isEmpty() ? url : url.substring(protocol.length());
 
-        if(hostPresent) {
-            String host = getHost(url, protocol);
-            String path = url.substring(hostEnd(url, protocol));
+        //absolute paths
+        if(host) { 
+            if(!getHost(url, protocol).equals(src.getHost())) return null;
             path = descend(path);
-            out.append(protocol).append(host).append(path);
-            return out.toString();
         }
         else {
-            String prefix = src.getURL();
-            prefix = prefix.substring(0, prefix.lastIndexOf('/'));
-            return prefix + '/' + url;
+            //relative paths
+            path = path.startsWith("/") ? src.getHost() + "/" + path : absoluteURL();
+            path = descend(path);
         }
+        
+        sanitizedURL = protocol.isEmpty() ? PROTOCOL_SAFE + path : protocol + path;
+        return sanitizedURL;
+    }
+    
+    private String absoluteURL() {
+        String prefix = src.getURLNoProtocol();
+        prefix = prefix.substring(0, prefix.lastIndexOf('/'));
+        return prefix + '/' + url;
     }
     
     private String getProtocol(String url) {

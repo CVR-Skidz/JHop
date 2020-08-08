@@ -22,10 +22,6 @@ public class HopConnection{
         connection.setRequestMethod("GET");
     }
     
-    public void connect() throws IOException {
-        connection.connect();
-    }
-    
     public String getResponse() throws IOException {
         Reader res = new InputStreamReader(connection.getInputStream());
         BufferedReader bufferedRes = new BufferedReader(res);
@@ -69,6 +65,18 @@ public class HopConnection{
         
         out.append("://").append(host).append(url.getPath());
         return out.toString();
+    }
+    
+    public String getHost() {
+        return url.getHost();
+    }
+    
+    public String getProtocol() {
+        return url.getProtocol();
+    }
+    
+    public void connect() throws IOException {
+        connection.connect();
     }
     
     public String toString() {
