@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.cvrskidz.jhop;
-import com.cvrskidz.jhop.exceptions.InvalidArgumentException;
+package com.cvrskidz.jhop.executables;
+import com.cvrskidz.jhop.SetFactory;
+import com.cvrskidz.jhop.exceptions.CommandException;
 import java.util.List;
 
 /**
@@ -15,15 +11,14 @@ import java.util.List;
  * @author cvr-skidz bcc9954 18031335
  */
 public abstract class Operation implements Executable{
-    //The  priority of commands that do not allow other commands to be used in the same call
+    //The priority of commands that do not allow other commands to be used in the same call
     public final static int MASTER_PR = -1; 
     
-    protected int argc;
+    protected String name;
+    protected int argc, priority;
     protected List<String> argv;
     protected boolean error;
-    protected Exception errorException;
-    protected String name;
-    protected int priority;
+    protected CommandException errorException;
     
     /**
      * Default Operation constructor.
@@ -62,9 +57,8 @@ public abstract class Operation implements Executable{
      * @param argv The operation arguments.
      * @return  A new Operation or null if supplied an invalid call.
      */
-    public static Operation OpFactory(String call, List<String> argv) 
-            throws InvalidArgumentException{
-        if(argv.isEmpty()) throw new InvalidArgumentException();
+    public static Operation OpFactory(String call, List<String> argv) throws CommandException{
+        if(argv.isEmpty()) throw new CommandException("Supplied no arguments", call);
         
         switch(call) {
             case Searcher.OPNAME:
@@ -84,7 +78,7 @@ public abstract class Operation implements Executable{
     }
     
     @Override
-    public Exception getError(){
+    public CommandException getError(){
         return errorException;
     }
     
@@ -131,7 +125,16 @@ public abstract class Operation implements Executable{
     
     protected void setError(Exception e) {
         this.error = true;
-        this.errorException = e;
+        
+        if(e instanceof CommandException) {
+            errorException = (CommandException)e;
+        }
+        else {
+            //wrap exception
+            String message = e.getMessage();
+            CommandException wrapped = new CommandException(message, name);
+            errorException = wrapped;
+        }
     }
     
     @Override

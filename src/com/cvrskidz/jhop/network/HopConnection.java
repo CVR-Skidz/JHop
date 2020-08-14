@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.cvrskidz.jhop;
+package com.cvrskidz.jhop.network;
 
 import java.io.BufferedReader;
 import java.net.URL;
@@ -13,8 +8,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 public class HopConnection{
-    private URL url;
-    private HttpURLConnection connection;
+    private final URL url;
+    private final HttpURLConnection connection;
     
     public HopConnection(String src) throws IOException {
         url = new URL(src);
@@ -22,19 +17,17 @@ public class HopConnection{
         connection.setRequestMethod("GET");
     }
     
-    public String getResponse() throws IOException {
+    public Response getResponse() throws IOException {
         Reader res = new InputStreamReader(connection.getInputStream());
         BufferedReader bufferedRes = new BufferedReader(res);
-        
         StringBuilder out = new StringBuilder();
-        String lineBuffer  = "";
+        String lineBuffer;
         
         while((lineBuffer = bufferedRes.readLine()) != null) {
-            out.append(lineBuffer);
-            out.append('\n');
+            out.append(lineBuffer).append('\n');
         }
         
-        return out.toString();
+        return new Response(this, out.toString());
     } 
     
     public void disconnect() {
@@ -79,6 +72,7 @@ public class HopConnection{
         connection.connect();
     }
     
+    @Override
     public String toString() {
         StringBuilder out = new StringBuilder("Protocol: ");
         out.append(url.getProtocol());

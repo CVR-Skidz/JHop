@@ -1,12 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.cvrskidz.jhop;
 
+import com.cvrskidz.jhop.parsers.ArgumentParser;
+import com.cvrskidz.jhop.executables.Command;
+import com.cvrskidz.jhop.executables.Operation;
+import com.cvrskidz.jhop.exceptions.CommandException;
+
 /**
- *
  * @author cvr-skidz bcc9954 18031335
  */
 public class JHop {
@@ -18,9 +17,9 @@ public class JHop {
             Command command = new Command(ops);
             command.safeExec();
         }
-        catch(Exception e) {
-            System.err.println("**ERROR** " + e.getMessage());
-//            e.printStackTrace();
+        catch(CommandException e) {
+            System.err.println(e.getMessage());
+            System.out.println("Terminating safely...");
         }
     }
 }

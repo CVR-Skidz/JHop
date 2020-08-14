@@ -1,12 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.cvrskidz.jhop;
-import com.cvrskidz.jhop.exceptions.CommandNotFoundException;
-import com.cvrskidz.jhop.exceptions.InvalidArgumentException;
+package com.cvrskidz.jhop.parsers;
+
+import com.cvrskidz.jhop.executables.Operation;
+import com.cvrskidz.jhop.exceptions.CommandException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -37,7 +34,7 @@ public class ArgumentParser {
      * 
      * @param argv The arguments supplied by the shell to the main method.
      * 
-     * @see com.cvrskidz.jhop.ArgumentParser
+     * @see com.cvrskidz.jhop.parsers.ArgumentParser
      * @see com.cvrskidz.jhop.Operation
      */
     public ArgumentParser(String[] argv) {
@@ -52,29 +49,29 @@ public class ArgumentParser {
      * a JHop program after this object is instantiated.
      * 
      * @see com.cvrskidz.jhop.Operation
-     * @throws com.cvrskidz.jhop.exceptions.CommandNotFoundException
+     * @throws com.cvrskidz.jhop.exceptions.CommandException
      */
-    public void parse() throws CommandNotFoundException, InvalidArgumentException{
+    public void parse() throws CommandException{
         operations = new ArrayList<>(); 
         List<String> args = new ArrayList<>();
-        String opName = null;
+        String operationName = null;
         
         //split operations and values
         for(String s: arguments) {
             if(isOperation(s)) {
                 //add operation in buffers
-                if(opName != null) { 
-                    operations.add(opHelper(opName, args));
+                if(operationName != null) { 
+                    operations.add(getInstance(operationName, args));
                     args.clear();
                 }
                 //start new operation
-                opName = s; 
+                operationName = s; 
             }
             else args.add(s);
         }
         
         //handle tokens left in scope
-        if (opName != null) operations.add(opHelper(opName, args));
+        if (operationName != null) operations.add(getInstance(operationName, args));
     }
     
     /**
@@ -87,11 +84,12 @@ public class ArgumentParser {
      * @return A new Operation.
      * @see com.cvrskidz.jhop.Operation
      */
-    private Operation opHelper(String call, List<String> args) 
-            throws CommandNotFoundException, InvalidArgumentException{
-        List<String> argsCopy = new ArrayList<>(args);
+    private Operation getInstance(String call, List<String> args) throws CommandException{
+        List<String> argsCopy = new ArrayList(args);
         Operation op = Operation.OpFactory(call, argsCopy);
-        if(op == null) throw new CommandNotFoundException(call, args);
+        
+        if(op == null) throw new CommandException("Unkown", call);
+        
         return op;
     }
     
@@ -131,12 +129,12 @@ public class ArgumentParser {
     }
     
     /**
-     * Joins all strings present in array, separated by spaces.
+     * Joins all strings present in an array, separated by spaces.
      * 
      * @param a The array to join.
      * @return The space separated String.
      */
-    public static String stringify(String[] a) {
+    private String stringify(String[] a) {
         StringBuilder out = new StringBuilder();
         int end = a.length;
         
@@ -152,9 +150,11 @@ public class ArgumentParser {
     public String toString() {
         StringBuilder out = new StringBuilder();
         
-        for(Operation op: operations) {
-            out.append(op.toString());
-            out.append("\n");
+        Iterator<Operation> it = operations.iterator();
+        while(it.hasNext()) {
+            Operation current = it.next();
+            out.append(current.toString());
+            if(it.hasNext()) out.append("\n");
         }
         
         return out.toString();
