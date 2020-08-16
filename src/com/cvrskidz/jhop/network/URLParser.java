@@ -53,7 +53,10 @@ public class URLParser implements Parser<HopConnection>{
         else if(!hasHost) path = absoluteOf(url);
         
         path = descend(path);
-        path = path.substring(0, path.indexOf(EXCLUDED_DELIM));
+        if(path.contains(EXCLUDED_DELIM)) {
+            path = path.substring(0, path.indexOf(EXCLUDED_DELIM));
+        }
+        
         res.append(protocol.isEmpty() ? PROTOCOL_SAFE : protocol).append(path);
         return res.toString();
     }

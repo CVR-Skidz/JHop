@@ -1,5 +1,4 @@
 package com.cvrskidz.jhop.executables;
-import com.cvrskidz.jhop.SetFactory;
 import com.cvrskidz.jhop.exceptions.CommandException;
 import java.util.List;
 
@@ -47,34 +46,6 @@ public abstract class Operation implements Executable{
         this.argv = argv;
         this.argc = argv.size();
         this.name = name;
-    }
-    
-    /**
-     * Constructs an appropriate Operation based on the supplied operation name. 
-     * Or a null reference when supplied an invalid operation.
-     * 
-     * @param call The operation name.
-     * @param argv The operation arguments.
-     * @return  A new Operation or null if supplied an invalid call.
-     */
-    public static Operation OpFactory(String call, List<String> argv) throws CommandException{
-        if(argv.isEmpty()) throw new CommandException("Supplied no arguments", call);
-        
-        switch(call) {
-            case Searcher.OPNAME:
-                return new Searcher(argv); 
-            case Viewer.OPNAME:
-                return new Viewer(argv);
-            case Crawler.OPNAME:
-                return new Crawler(argv);
-            case SetFactory.CREATESET:
-            case SetFactory.DROPSET:
-            case SetFactory.SPECIFY:
-            case SetFactory.ENCRYPT:
-                return new SetFactory(argv, call);
-            default:
-                return null;
-        }
     }
     
     @Override
@@ -132,6 +103,20 @@ public abstract class Operation implements Executable{
         else {
             //wrap exception
             String message = e.getMessage();
+            CommandException wrapped = new CommandException(message, name);
+            errorException = wrapped;
+        }
+    }
+    
+    protected void setError(Exception e, String prefix) {
+        this.error = true;
+        
+        if(e instanceof CommandException) {
+            errorException = (CommandException)e;
+        }
+        else {
+            //wrap exception
+            String message = prefix + e.getMessage();
             CommandException wrapped = new CommandException(message, name);
             errorException = wrapped;
         }

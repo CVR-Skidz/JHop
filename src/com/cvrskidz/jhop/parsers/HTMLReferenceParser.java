@@ -22,14 +22,20 @@ public class HTMLReferenceParser extends HTMLParser<Elements>{
      */
     @Override 
     public Parser<Elements> parse() {
-        Elements surface = dom.body().children();
-        referenceNodes = getMatchingElements(surface);
+        try {
+            Elements surface = dom.body().children();
+            referenceNodes = getMatchingElements(surface);
         
-        Iterator<Element> it = referenceNodes.iterator();
-        while(it.hasNext()) {
-            Element e = it.next();
-            String reference = e.attributes().get(REF_KEY);
-            if(reference.isEmpty()) it.remove();
+            Iterator<Element> it = referenceNodes.iterator();
+            while(it.hasNext()) {
+                Element e = it.next();
+                String reference = e.attributes().get(REF_KEY);
+                if(reference.isEmpty()) it.remove();
+            }
+        }
+        catch (NullPointerException e) {
+            //parsed with bad input, or not initalized
+            referenceNodes = new Elements();
         }
         
         return this;

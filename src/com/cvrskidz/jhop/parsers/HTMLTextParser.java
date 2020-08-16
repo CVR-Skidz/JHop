@@ -14,13 +14,19 @@ public class HTMLTextParser extends HTMLParser<String>{
     
     @Override 
     public Parser<String> parse() {
-        Elements surface = dom.body().children();
-        textNodes = getMatchingElements(surface);
-        
-        Iterator<Element> it = textNodes.iterator();
-        while(it.hasNext()) {
-            Element e = it.next();
-            if(!e.hasText()) it.remove();
+        try {
+            Elements surface = dom.body().children();
+            textNodes = getMatchingElements(surface);
+
+            Iterator<Element> it = textNodes.iterator();
+            while(it.hasNext()) {
+                Element e = it.next();
+                if(!e.hasText()) it.remove();
+            }
+        }
+        catch (NullPointerException e) {
+            //parsed with bad input, or not initalized
+            textNodes = new Elements();
         }
         
         return this;

@@ -73,6 +73,16 @@ public class HopConnection{
     }
     
     @Override
+    public boolean equals(Object o) {
+        if(o instanceof HopConnection) {
+            HopConnection other = (HopConnection)o;
+            return other.getURL().equals(getURL());
+        }
+        
+        return false;
+    }
+    
+    @Override
     public String toString() {
         StringBuilder out = new StringBuilder("Protocol: ");
         out.append(url.getProtocol());

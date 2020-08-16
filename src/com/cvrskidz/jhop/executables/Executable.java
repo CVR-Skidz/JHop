@@ -1,5 +1,7 @@
 package com.cvrskidz.jhop.executables;
 
+import com.cvrskidz.jhop.indexes.Index;
+
 /**
  * An object that can be executed. A user of this interface specifies the exact
  * functionality of the `exec` method. 
@@ -14,7 +16,7 @@ public interface Executable {
     /**
      * Execute the intended functionality of this instance.
      */
-    public void exec();
+    public Index exec(Index index);
     
     /**
      * Retrieve any errors that occurred whilst executing this instance.

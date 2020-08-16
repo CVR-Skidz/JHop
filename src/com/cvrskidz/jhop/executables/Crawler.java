@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashMap;
-import java.util.Map;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -35,21 +33,20 @@ public class Crawler extends Operation{
         previousHop = null;
         sourceConnection = null;
         hops = new ArrayDeque<>();
-        //stub
-        index = new Index();
     }
     
     @Override
-    public void exec() {
+    public Index exec(Index index) {
         try {
             sourceConnection = new HopConnection(source);
-            previousHop = getSourceConnection();
-            crawl(getSourceConnection());
+            crawl(sourceConnection, index);
             System.out.println(index);
         }
         catch(IOException e) {
             setError(e);
         }
+        
+        return index;
     }
     
     private void init(List<String> argv) throws CommandException{
@@ -68,11 +65,12 @@ public class Crawler extends Operation{
         }
     }
     
-    private void crawl(HopConnection url) {
+    private void crawl(HopConnection url, Index index) {
         Response query = new Response(url, null);
+        boolean isSelfHop = previousHop == null ? false : previousHop.equals(url);
 
-        if(index.contains(query) && !hops.isEmpty()) {
-            crawl(hops.pop());
+        if(isSelfHop || index.contains(query)) {
+            if(!hops.isEmpty()) crawl(hops.pop(), index);
             return;
         }
         
@@ -84,14 +82,20 @@ public class Crawler extends Operation{
             Response response = url.getResponse();
             hops.addAll(parseURLs(response));
             response.setContents(parseText(response));
-            index.index(response);
-            if(currentHop++ < maxHops) crawl(hops.pop());
+            if(response.getContents().isEmpty()) {
+                while(hops.contains(url)) hops.remove(url);
+                --currentHop;
+            }
+            else index.index(response);
+
+            if(!hops.isEmpty() && currentHop++ < maxHops) crawl(hops.pop(), index);
             
             url.disconnect();
         }
         catch(IOException | CrawlerException e) {
-            setError(e);
+            setError(e, "Error establishing connection to ");
         }
+        
     }
     
     /**

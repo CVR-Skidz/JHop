@@ -2,6 +2,7 @@ package com.cvrskidz.jhop.parsers;
 
 import com.cvrskidz.jhop.executables.Operation;
 import com.cvrskidz.jhop.exceptions.CommandException;
+import com.cvrskidz.jhop.executables.OperationFactory;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -86,7 +87,8 @@ public class ArgumentParser {
      */
     private Operation getInstance(String call, List<String> args) throws CommandException{
         List<String> argsCopy = new ArrayList(args);
-        Operation op = Operation.OpFactory(call, argsCopy);
+        OperationFactory factory = new OperationFactory(argsCopy, call);
+        Operation op = factory.produce();
         
         if(op == null) throw new CommandException("Unkown", call);
         

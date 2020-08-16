@@ -1,29 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.cvrskidz.jhop.executables;
+import com.cvrskidz.jhop.indexes.Index;
 import java.util.List;
 
 /**
- *
  * @author cvr-skidz bcc9954 18031335
  */
-public class Viewer extends Searcher{
+public class Viewer extends Operation{
     public static final String OPNAME = "--show";
     private final static int PRIORITY = 2;
+    private String title;
     
     public Viewer(List<String> argv) {
-        super(argv);
-        this.name = OPNAME;
-        this.priority = PRIORITY;
+        super(argv, OPNAME);
+        priority = PRIORITY;
+        title = argv.get(0);
     }
     
     @Override
-    public void exec() {
-        super.exec();
+    public Index exec(Index index) {
         //stub
-        System.out.println("Description of " + term);
+        System.out.println("Page of " + title);
+        return index;
     }
 }

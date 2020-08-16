@@ -1,6 +1,7 @@
 package com.cvrskidz.jhop.indexes;
 
 import com.cvrskidz.jhop.network.Response;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,7 +9,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-public class Index implements Indexable<Response>{
+public class Index implements Indexable<Response>, Serializable{
     protected Map<String, Set<String>> terms;
     protected Map<String, Map<String, Integer>> pages;
     
@@ -44,6 +45,14 @@ public class Index implements Indexable<Response>{
         return this;
     }
     
+    public Set<String> getPagesContaining(String term) {
+        return terms.get(term);
+    }
+    
+    public Integer getFequencyIn(String term, String page) {
+        return pages.get(page).get(term);
+    }
+    
     private void indexPage(String url, String term) {
         Map<String, Integer> terms = pages.get(url);
         int frequency = 1;
@@ -76,11 +85,8 @@ public class Index implements Indexable<Response>{
         StringBuilder out = new StringBuilder();
         
         for(Entry<String, Map<String, Integer>> e: pages.entrySet()) {
-            out.append(e.getKey()).append("\n");
-            for(Entry term: e.getValue().entrySet()) {
-                out.append("\t").append(term.getKey())
-                    .append(": ").append(term.getValue()).append("\n");
-            }
+            out.append(e.getKey()).append(" terms: ");
+            out.append(e.getValue().size()).append("\n");
         }
         
         return out.toString();

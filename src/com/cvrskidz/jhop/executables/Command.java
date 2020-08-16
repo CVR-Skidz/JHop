@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.cvrskidz.jhop.executables;
 
 import com.cvrskidz.jhop.exceptions.CommandException;
 import com.cvrskidz.jhop.exceptions.PriorityViolationException;
+import com.cvrskidz.jhop.indexes.Index;
 
 /**
  * A fixed sequence of operations. A Command executes operations under a set of 
@@ -19,9 +15,8 @@ import com.cvrskidz.jhop.exceptions.PriorityViolationException;
  * @author cvr-skidz bcc9954 18031335
  */
 public class Command implements Executable{
-    // TODO: private Set target;
     
-    private Operation[] operations;
+    private final Operation[] operations;
     private boolean error;
     private CommandException errorException;
     
@@ -30,31 +25,29 @@ public class Command implements Executable{
         this.operations = operations;
     }
     
-    public void safeExec() throws CommandException{
-        exec();
+    public Index safeExec(Index index) throws CommandException{
+        index = exec(index);
         
         if(error) throw errorException;
+        return index;
     }
     
     @Override
-    public void exec(){
+    public Index exec(Index index){
         sort();
         
         CommandException mismatch = validatePriority();
         if(mismatch == null) mismatch = validateSpecialPriority();
 
-        if(mismatch != null) {
-            setError(mismatch);
-            return;
-        }
-        
-        for(Operation o: operations) {
-            o.exec();
-            if(!o.success()) {
-                setError(o);
-                return;
+        if(mismatch != null) setError(mismatch);
+        else {
+            for(Operation o: operations) {
+                index = o.exec(index);
+                if(!o.success()) setError(o);
             }
         }
+        
+        return index;
     }
     
     @Override

@@ -1,5 +1,8 @@
 package com.cvrskidz.jhop.executables;
+import com.cvrskidz.jhop.exceptions.CommandException;
+import com.cvrskidz.jhop.indexes.Index;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author cvr-skidz bcc9954 18031335
@@ -16,8 +19,19 @@ public class Searcher extends Operation{
     }
     
     @Override
-    public void exec() {
-        //stub
-        System.out.println("Searching for " + term);
+    public Index exec(Index index) {
+        if(index == null) {
+            setError(new CommandException("Index is empty", name));
+        }
+        else {
+            Set<String> results = index.getPagesContaining(term);
+            
+            if(results == null) System.out.println("No results found");
+            else {
+                for(String page: results) System.out.println(page);
+            }
+        }
+        
+        return index;
     }
 }
