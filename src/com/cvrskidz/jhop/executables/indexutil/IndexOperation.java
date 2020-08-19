@@ -4,6 +4,7 @@ import com.cvrskidz.jhop.executables.Operation;
 import java.util.List;
 
 public abstract class IndexOperation extends Operation{
+    public static String PATH = "config";
     protected String indexName;
     
     public IndexOperation(List<String> argv, String name) {
