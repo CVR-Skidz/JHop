@@ -38,12 +38,12 @@ public class IndexOperationFactory{
         switch(name) {
             case IndexDropper.OPNAME:
                 return new IndexDropper(args);
-            case IndexEncoder.OPNAME:
-                return new IndexEncoder(args);
             case IndexReader.OPNAME:
                 return new IndexReader(args);
             case IndexWriter.OPNAME:
                 return new IndexWriter(args);
+            case IndexInspector.OPNAME:
+                return new IndexInspector(args);
             default:
                 return null;
         }

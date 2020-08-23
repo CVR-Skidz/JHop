@@ -6,24 +6,21 @@ import java.util.Objects;
 import java.util.StringTokenizer;
 
 public class IndexOptions implements Serializable{
-    public final static int MEMBER_COUNT = 4;
-    private boolean encoded;
+    public final static int MEMBER_COUNT = 3;
     private String name, attribute, value;
     
     public IndexOptions() {
-        encoded = false;
         name = "";
         attribute = "";
         value = "";
     }
     
-    public IndexOptions(String name, boolean encoded) {
-        this.encoded = encoded;
+    public IndexOptions(String name) {
         this.name = name;
     }
     
-    public IndexOptions(String name, boolean encoded, String attribute, String value) {
-        this(name, encoded);
+    public IndexOptions(String name, String attribute, String value) {
+        this(name);
         setQuery(attribute, value);
     }
 
@@ -36,17 +33,8 @@ public class IndexOptions implements Serializable{
             String name = tokens.nextToken();
             String attr = tokens.nextToken();
             String val = tokens.nextToken();
-            boolean encoded = Boolean.valueOf(tokens.nextToken());
-            return new IndexOptions(name, encoded, attr, val);
+            return new IndexOptions(name, attr, val);
         }
-    }
-    
-    public boolean isEncoded() {
-        return encoded;
-    }
-
-    public void setEncoded(boolean encoded) {
-        this.encoded = encoded;
     }
 
     public String getName() {
@@ -75,7 +63,6 @@ public class IndexOptions implements Serializable{
         StringBuilder out = new StringBuilder(name); 
         out.append(",").append(attribute);
         out.append(",").append(value);
-        out.append(",").append(encoded);
         return out.toString();
     }
     

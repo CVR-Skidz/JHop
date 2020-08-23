@@ -22,7 +22,8 @@ public class HTMLReferenceParser extends HTMLParser<Elements>{
     @Override 
     public Parser<Elements> parse() {
         try {
-            Elements surface = dom.body().children();
+            Elements surface = new Elements();
+            surface.add(dom.body());
             referenceNodes = getMatchingElements(surface);
         
             Iterator<Element> it = referenceNodes.iterator();

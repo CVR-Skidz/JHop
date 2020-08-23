@@ -38,7 +38,7 @@ public class IndexDropper extends IndexOperation{
         
         try {
             indexes = IndexReader.getStoredIndexes(IndexOperation.PATH);
-            IndexOptions query = new IndexOptions(indexName, false);
+            IndexOptions query = new IndexOptions(indexName);
             indexes.remove(query);
             return indexes;
         }

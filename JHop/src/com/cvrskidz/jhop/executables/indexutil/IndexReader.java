@@ -27,7 +27,7 @@ public class IndexReader extends IndexOperation{
     public Index exec(Index index) {
         try {
             Deque<IndexOptions> cache = getStoredIndexes(IndexOperation.PATH);
-            IndexOptions target = new IndexOptions(indexName, false);
+            IndexOptions target = new IndexOptions(indexName);
             if(!cache.contains(target)) {
                 System.out.println("Could not find index in config: " + indexName);
                 return index;

@@ -35,6 +35,7 @@ public class Viewer extends Operation{
         
         if(results.size() > 1) {
             System.out.println("Multiple pages matched query: ");
+            for(IndexEntry entry: results) System.out.println(entry.getUrl());
         }
         else if(results.isEmpty()) return index;
         else source = results.get(0);

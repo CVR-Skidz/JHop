@@ -21,7 +21,8 @@ public class HTMLTextParser extends HTMLParser<String>{
     @Override 
     public Parser<String> parse() {
         try {
-            Elements surface = dom.body().children();
+            Elements surface = new Elements();
+            surface.add(dom.body());
             textNodes = getMatchingElements(surface);
                 
             Set<String> tags = includedTags();

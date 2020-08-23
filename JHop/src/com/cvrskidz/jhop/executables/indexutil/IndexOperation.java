@@ -6,9 +6,9 @@ import com.cvrskidz.jhop.executables.Operation;
 import java.util.List;
 
 public abstract class IndexOperation extends Operation{
-    private static final int ARGC = 1;
     public static final String PATH = "sets";
     protected String indexName;
+    protected static final int ARGC = 1;
     
     public IndexOperation(List<String> argv, String name) throws CommandException {
         super(argv, name);
