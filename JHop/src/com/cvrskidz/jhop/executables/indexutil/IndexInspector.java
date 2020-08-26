@@ -43,7 +43,7 @@ public class IndexInspector extends IndexOperation{
             IndexReader reader = new IndexReader(args);
             Index result = new Index();
             result = reader.exec(result);
-            System.out.println(name + ":");
+            System.out.println("\n" + name + ":");
             System.out.println(result);
         }
         catch(CommandException e) {

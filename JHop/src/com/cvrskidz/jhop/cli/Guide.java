@@ -1,9 +1,11 @@
 package com.cvrskidz.jhop.cli;
 
+import com.cvrskidz.jhop.indexes.Index;
 import java.util.Scanner;
 
 public abstract class Guide implements Interactable{
     protected Scanner in;
+    protected static Index index;
     
     public Guide(Scanner in) {
         this.in = in;
@@ -28,5 +30,9 @@ public abstract class Guide implements Interactable{
         } while(userInput.isEmpty());
         
         return userInput;
+    }
+    
+    public Scanner getInputScanner() {
+        return in;
     }
 }

@@ -1,13 +1,15 @@
 package com.cvrskidz.jhop.cli;
 
-import java.util.Scanner;
+import com.cvrskidz.jhop.JHop;
 
 public class JHopMenu{
+    private JHop master;
+    
     private enum MenuOption {
         SEARCH("Search an index"), 
         CRAWL("Create an index"), 
-        LIST("View available indexes"), 
-        LOAD("Load an index"), 
+        LIST("Display index information"), 
+        LOAD("Set active index"), 
         DROP("Delete an index"),
         QUIT("Quit");
         
@@ -19,18 +21,42 @@ public class JHopMenu{
         public String toString() { return message; }
     }
     
+    public JHopMenu(JHop master) {
+        this.master = master;
+    }
+    
     public void display() {
         MenuOption[] options = MenuOption.values();
         for(int i = 0; i < options.length; ++i) {
-            System.out.println((i+1) + ") " + options[i]);
+            System.out.println((i+1) + ": " + options[i]);
         }
     }
     
-    public void select(int option, Scanner input) {
-        MenuOption userOption = MenuOption.values()[option];
+    public Guide select(int option) {
+        MenuOption[] options = MenuOption.values();
+        --option;   //normalize index
+        
+        if(option > options.length - 1 || option < 0) {
+            System.out.println("Invalid Option");
+            return null;
+        }
+        
+        MenuOption userOption = options[option];
         
         switch(userOption) {
-            
+            case SEARCH:
+                return new SearchGuide(master.getInputScanner());
+            case CRAWL:
+                return new CreateGuide(master.getInputScanner());
+            case LIST:
+                return new ListGuide(master.getInputScanner());
+            case LOAD:
+                return new SetGuide(master.getInputScanner());
+            case DROP:
+                return new DeleteGuide(master.getInputScanner());
+            default:
+                master.stop();
+                return null;
         } 
     }
 }

@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * @author cvr-skidz bcc9954 18031335
  */
-public class Searcher extends Operation{
+public class Searcher extends SearchOperation{
     public final static String OPNAME = "--search";
     private final static int PRIORITY = 2, ARGC = 1;
     protected String term;
@@ -30,6 +30,8 @@ public class Searcher extends Operation{
             
             if(results == null) System.out.println("No results found");
             else {
+                searchResults = results.size();
+                System.out.println(searchResults + " results");
                 for(IndexEntry page: results) System.out.println(page);
             }
         }

@@ -15,33 +15,52 @@ import java.util.Scanner;
  */
 public class JHop extends Guide{
     private boolean run;
-    private Index index;
     private JHopMenu menu;
     
     public JHop(Scanner input) {
         super(input);
         run = true;
-        index = new Index();
-        menu = new JHopMenu();
+        menu = new JHopMenu(this);
+        Guide.index = new Index();
     }
     
     @Override
     public void poll() {
+        displayInfo();
+        
         while(run) {
             display();
             Integer option;
-            while((option = parseInt(prompt("> "))) == null) {
+            while((option = parseInt(prompt("\nEnter choice: "))) == null) {
                 System.out.println("Invalid Input");
             }
-            menu.select(option, in);
+            Guide userAction = menu.select(option);
+            if(userAction != null) {
+                System.out.println("");
+                userAction.poll();
+                userAction.display();
+            }
         }
     }
     
     @Override
     public void display() {
-        System.out.println("=== Welcome to JHop ===\n");
+        String name = Guide.index.getOptions().getName();
+        
+        System.out.println("");
+        System.out.println("Current Index: " + name);
+        System.out.println("");
         menu.display();
-        System.out.println("\nIndex: " + index.getOptions().getName());
+    }
+    
+    public void stop() {
+        run = false;
+    }
+    
+    private void displayInfo() {
+        System.out.println("Java Hop Seacrh Engine");
+        System.out.println("Version 0.1");
+        System.out.println("Author bcc9954, 18031335 @ cvr-skidz.github.io");
     }
     
     public static void main(String[] args) {

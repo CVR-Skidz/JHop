@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author cvr-skidz bcc9954 18031335
  */
-public class Viewer extends Operation{
+public class Viewer extends SearchOperation{
     public static final String OPNAME = "--show";
     private final static int PRIORITY = 2, ARGC = 1;
     private String title;
@@ -31,7 +31,8 @@ public class Viewer extends Operation{
         
         List<IndexEntry> results = index.getPage(title);
         IndexEntry source = null;
-        System.out.println(results.size() + " results");
+        searchResults = results.size();
+        System.out.println(searchResults + " results");
         
         if(results.size() > 1) {
             System.out.println("Multiple pages matched query: ");
