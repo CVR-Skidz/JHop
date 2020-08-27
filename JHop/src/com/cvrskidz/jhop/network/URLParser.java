@@ -12,6 +12,7 @@ import java.util.StringTokenizer;
  * is correctly added to the original URL so that it can be successfully used to 
  * open a HTTP/HTTPS connection.
  * 
+ * @see com.cvrskidz.jhop.network.HopConnection
  * @author bcc9954 18031335 cvrskidz
  */
 public class URLParser implements Parser<HopConnection>{
@@ -47,29 +48,54 @@ public class URLParser implements Parser<HopConnection>{
         return out;
     }
     
+    /**
+     * Create a valid URL from the URL loaded into this object.
+     *
+     * @return A valid URL.
+     */
     private String parseURL() {
         StringBuilder res = new StringBuilder(); 
         String protocol = getProtocol(url);
-        String path = protocol.isEmpty() ? url : url.substring(protocol.length());
+
+        // create a substring if the protocol is included
+        String path = protocol.isEmpty() ? url : url.substring(protocol.length());  
         String host = getHost(url, protocol);
         boolean hasHost = validHost(host);
         
-        if(hasHost && !host.equals(src.getHost())) return null;
-        else if(!hasHost) path = absoluteOf(url);
+        // return no URL if the given URL points to an external host
+        if(hasHost && !host.equals(src.getHost())) return null; 
+        // if the URL is relative make an absolute path 
+        if(!hasHost) path = absoluteOf(url);
         
-        path = descend(path);
+        path = descend(path);                                           // shorten path if possible
         if(path.contains(EXCLUDED_DELIM)) {
-            path = path.substring(0, path.indexOf(EXCLUDED_DELIM));
+            path = path.substring(0, path.indexOf(EXCLUDED_DELIM));     // remove element IDs from path
         }
         
-        res.append(protocol.isEmpty() ? PROTOCOL_SAFE : protocol).append(path);
+        //append the path to protocol
+        res.append(protocol.isEmpty() ? PROTOCOL_SAFE : protocol).append(path); 
         return res.toString();
     }
     
+    /**
+     * Validate that the supplied host contains a domain and does not specify an endpoint
+     * such as a file.
+     *
+     * @param host the host to validate
+     * @return true if the host is valid, false otherwise.
+     */
     private boolean validHost(String host) {
         return host.matches(HOST_EXP) && !host.endsWith(ENDPOINT);
     }
     
+    /**
+     * Convert a relative path to an absolute path, adding a host specified by the connection 
+     * loaded in this instance and ensuring the supplied path can be navogated to from the root
+     * of this connection.
+     *
+     * @param url The path to turn absolute.
+     * @return The absolute version of the given path.
+     */
     private String absoluteOf(String url) {
         StringBuilder out = new StringBuilder();
 
@@ -77,14 +103,20 @@ public class URLParser implements Parser<HopConnection>{
             out.append(src.getHost()).append(DELIM).append(url);
         }
         else {
-            String cwd = src.getURLNoProtocol();
-            cwd = cwd.substring(0, cwd.lastIndexOf(DELIM));
-            out.append(cwd).append(DELIM).append(url);
+            String cwd = src.getURLNoProtocol();            // the path to follow from the hosts root
+            cwd = cwd.substring(0, cwd.lastIndexOf(DELIM)); // find the path to the requested resource
+            out.append(cwd).append(DELIM).append(url);      // append the relative path to the absolute root path
         }
     
         return out.toString();
     }
     
+    /**
+     * Get the protocol specified by the supplied URL.
+     *
+     * @param url The URL to extract the protocol from
+     * @return The protocol specified in the given URL, or an empty string.
+     */
     private String getProtocol(String url) {
         if(url.startsWith(PROTOCOL)) {
             return PROTOCOL;
@@ -96,6 +128,14 @@ public class URLParser implements Parser<HopConnection>{
         return "";
     }
     
+    /**
+     * Get the host specified by the supplied URL.
+     *
+     * @param url The URL to extract the host from.
+     * @param protocol The protocol contained within the given URL. This should be empty if no protocol is present.
+     * @return The host contained in the supplied URL.
+     * @see  URLParser#getHost(String, String)
+     */
     private String getHost(String url, String protocol) {
         int end = url.indexOf(DELIM, protocol.length());
         
@@ -103,13 +143,19 @@ public class URLParser implements Parser<HopConnection>{
         else return url.substring(protocol.length());
     }
     
+    /**
+     * Shorten the given URL. Paths including ".." will traverse the given path to the containing route.
+     *
+     * @param url the URL to shorten
+     * @return The shotrtened version of the given URL
+     */
     private String descend(String url) {
         StringTokenizer tokens = new StringTokenizer(url, DELIM);
         Stack<String> pages = new Stack();
         
         while(tokens.hasMoreTokens()) {
             String token = tokens.nextToken();
-            if(token.equals("..") && !pages.empty()) pages.pop();
+            if(token.equals("..") && !pages.empty()) pages.pop();  
             else pages.push(token);
         }
         
