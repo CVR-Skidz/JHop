@@ -7,19 +7,24 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 
 /**
- * @author cvrskidz
+ * A URLParser parses the segments of a URL (protocol, domain, path) and 
+ * ensures that in the event any required information is missing this information
+ * is correctly added to the original URL so that it can be successfully used to 
+ * open a HTTP/HTTPS connection.
+ * 
+ * @author bcc9954 18031335 cvrskidz
  */
 public class URLParser implements Parser<HopConnection>{
     private static final String PROTOCOL = "http://", 
             PROTOCOL_SAFE = "https://",
             ENDPOINT = ".html",
-            HOST_EXP = ".+\\..+",
-            DELIM = "/",
-            EXCLUDED_DELIM = "#";
+            HOST_EXP = ".+\\..+",                       // host pattern
+            DELIM = "/",                                // delimeter used to seperate paths
+            EXCLUDED_DELIM = "#";                       // delimeter excluded from paths
 
     private final String url;
-    private final HopConnection src;
-    private HopConnection out;
+    private final HopConnection src;                    // valid connection used to correct incomplete URLs
+    private HopConnection out;                          // returned connection
     
     public URLParser(String url, HopConnection src) {
         this.url = url;

@@ -11,11 +11,21 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/**
+ * A Parser implementation for HTML. How the HTML is parsed is the implementing
+ * classes responsibility. This class defines common methods and members shared
+ * across all HTML parsers, but does not define any parsing functionality.
+ * 
+ * @author bcc9954 18013335 cvr-skidz
+ * @param <E> The type of the parsed output.
+ */
 public abstract class HTMLParser<E> implements Parser<E>{
-    protected Document dom;
-    protected Set<String> tags;
-    protected String attribute, value;
+    protected Document dom;             // DOM of the HTML suuplied to this
+    protected Set<String> tags;         // Tags to accept when parsing this DOM
+    protected String attribute, value;  // The query to check when parsing this DOM
     
+    // The realtive path of the configuration file specifiying applicable
+    // tags to parse.
     public static final String PATH = "include";
     
     public HTMLParser(String html, String attribute, String value) {
@@ -55,8 +65,8 @@ public abstract class HTMLParser<E> implements Parser<E>{
      * Returns all elements who are children of the specified
      * node. 
      * <p>
-     * The children returned are not only direct children of the parent node, but 
-     * any element beneath the parent node within the node tree.
+     * The manner in which children are selected is determined by the underlying 
+     * HTMLParser implementation.
      * 
      * @param node The parent of the children elements.
      * @return All elements who are children of the specified
@@ -68,6 +78,12 @@ public abstract class HTMLParser<E> implements Parser<E>{
         dom = Jsoup.parse(html);
     }
     
+    /**
+     * Reads the names of tags to include, and therefore also the names of tags
+     * to exclude from parsing, from a configuration file stored on disk.
+     * 
+     * @return A set of tag names to accept when parsing HTML.
+     */
     protected Set<String> includedTags() {
         try {
             Reader file = new FileReader(HTMLParser.PATH);
