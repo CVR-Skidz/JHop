@@ -14,18 +14,36 @@ import java.util.Deque;
 import java.util.ArrayDeque;
 import java.util.List;
 
+/**
+ * Read and load a persistent Index into the active JHop Index.
+ * 
+ * @author bcc9954 18031335 cvrskidz
+ */
 public class IndexReader extends IndexOperation{
     public final static String OPNAME = "--set";
     private final static int PRIORITY = 1;
     
+    /**
+     * Constructs a new IndexReader. An IndexReader expects 1 argument.
+     * 
+     * @param argv The arguments supplied to this operation.
+     * @throws CommandException  If the arguments were invalid
+     */
     public IndexReader(List<String> argv) throws CommandException {
         super(argv, OPNAME);
         priority = PRIORITY;
     }
     
+    /**
+     * Loads the specified Index.
+     * 
+     * @param index The current Index.
+     * @return The loaded Index.
+     */
     @Override
     public Index exec(Index index) {
         try {
+            // check index exists
             Deque<IndexOptions> cache = getStoredIndexes(IndexOperation.PATH);
             IndexOptions target = new IndexOptions(indexName);
             if(!cache.contains(target)) {
@@ -33,6 +51,7 @@ public class IndexReader extends IndexOperation{
                 return index;
             }
             
+            // deserialize
             InputStream file = new FileInputStream(indexName);
             ObjectInputStream out = new ObjectInputStream(file);
             index = (Index)out.readObject();
@@ -45,12 +64,20 @@ public class IndexReader extends IndexOperation{
         return index;
     }
     
+    /**
+     * Read all persistent indexes stored in JHops configuration.
+     * 
+     * @param path The path of the configuration file.
+     * @return A set of all IndexOptions stored in JHops configuration file.
+     * @throws IOException If the configuration file could not be read.
+     */
     public static Deque<IndexOptions> getStoredIndexes(String path) throws IOException{
         Deque<IndexOptions> cache = new ArrayDeque();
         Reader file = new FileReader(path);
         BufferedReader bufferedFile = new BufferedReader(file);
-        String optionBuffer;
+        String optionBuffer;    //buffer to store index at current line in config
         
+        // read each index in config
         while((optionBuffer = bufferedFile.readLine()) != null) {
             IndexOptions options = IndexOptions.fromString(optionBuffer);
             cache.add(options);

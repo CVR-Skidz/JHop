@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * Displays the contents of a page contained in an index, making a 
+ * web request to the associated host.
+ * 
  * @author cvr-skidz bcc9954 18031335
  */
 public class Viewer extends SearchOperation{
@@ -19,12 +22,27 @@ public class Viewer extends SearchOperation{
     private final static int PRIORITY = 2, ARGC = 1;
     private String title;
     
+    /**
+     * Constructs a new Viewer. A Viewer expects 1 argument.
+     * 
+     * @param argv The arguments to supply to the operation.
+     * @throws CommandException If the arguments were invalid.
+     */
     public Viewer(List<String> argv) throws CommandException {
         super(argv, OPNAME);
         init();
         priority = PRIORITY;
     }
     
+    /**
+     * Ensure the index contains a unique result for the requested page,
+     * then make and parse the request to display the page contents.
+     * <p>
+     * Note a terminal emulator that supports line wrapping is strongly recommended.
+     * 
+     * @param index The index to search.
+     * @return A reference to the same index after viewing.
+     */
     @Override
     public Index exec(Index index) {
         if(title == null) return index;
@@ -34,6 +52,7 @@ public class Viewer extends SearchOperation{
         searchResults = results.size();
         System.out.println(searchResults + " results");
         
+        // requires unique page
         if(results.size() > 1) {
             System.out.println("Multiple pages matched query: ");
             for(IndexEntry entry: results) System.out.println(entry.getUrl());
@@ -46,14 +65,22 @@ public class Viewer extends SearchOperation{
         return index;
     }
     
+    /**
+     * Make and parse the specified request, displaying it's contents.
+     * 
+     * @param source The entry specifying the requested content.
+     * @param options The options specifying the index query.
+     */
     private void display(IndexEntry source, IndexOptions options) {
         if(source == null) return;
         
         try {
+            // make request
             HopConnection connection = new HopConnection(source.getSource());
             connection.connect();
             Response res = connection.getResponse();
             
+            // display text
             String html = res.getContents();
             String id = options.getAttribute();
             String val = options.getValue();

@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-public class Index implements Indexable<Response>, Serializable{
+public class Index implements Indexable<Response, IndexEntry>, Serializable{
     protected Map<String, Set<IndexEntry>> terms;
     protected Map<IndexEntry, Map<String, Integer>> pages;
     
@@ -35,7 +35,7 @@ public class Index implements Indexable<Response>, Serializable{
     }
     
     @Override
-    public Indexable<Response> index(Response res) {
+    public Indexable<Response, IndexEntry> index(Response res) {
         StringTokenizer tokens = new StringTokenizer(res.getContents());
         IndexEntry url = new IndexEntry(res.getUrl());
         
@@ -66,7 +66,21 @@ public class Index implements Indexable<Response>, Serializable{
     }
     
     public Set<IndexEntry> getPagesContaining(String term) {
-        return terms.get(term);
+        // search for both capitalized and uncapitalized terms.
+        char firstLetter = term.charAt(0);
+        boolean capital = firstLetter <= 'Z';
+        firstLetter -= capital ? 'A' - 'a' : 'a' - 'A';
+        String alternate = firstLetter + term.substring(1);
+        
+        Set<IndexEntry> results = terms.get(term);      // results for original term
+        Set<IndexEntry> altResults = terms.get(alternate);   // results for alternate term
+        
+        if(altResults != null) {
+            if(results != null) results.addAll(altResults);
+            else results = altResults;
+        }
+        
+        return results;
     }
     
     public Integer getFequencyIn(String term, IndexEntry page) {

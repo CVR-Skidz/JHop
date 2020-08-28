@@ -10,6 +10,12 @@ public class Response {
     private String contents;
     private final HopConnection url;
     
+    /**
+     * Constructs a new Response containing the given connection and contents.
+     * 
+     * @param url The connection to store.
+     * @param contents The response contents to store.
+     */
     public Response(HopConnection url, String contents) {
         this.url = url;
         this.contents = contents;

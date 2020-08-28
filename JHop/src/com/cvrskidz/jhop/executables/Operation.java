@@ -1,5 +1,4 @@
 package com.cvrskidz.jhop.executables;
-import com.cvrskidz.jhop.exceptions.ArgumentException;
 import com.cvrskidz.jhop.exceptions.CommandException;
 import java.util.List;
 
@@ -35,7 +34,7 @@ public abstract class Operation implements Executable{
      * invoked to provide a functional Operation.
      * 
      * <p><strong>This constructor is not intended to be invoked manually.</strong>
-     * Use {@link com.cvrskidz.jhop.Operation#OpFactory} instead.
+     * Use {@link OperationFactory} instead.
      * 
      * @param argv Arguments supplied to the operation.
      * @param name Operation name. Must be a valid operation as specified by 
@@ -95,6 +94,13 @@ public abstract class Operation implements Executable{
         return priority;
     }
     
+    /**
+     * Sets the error of this operation to the specified exception, wrapping
+     * it to a CommandException if necessary.
+     * 
+     * @param e The exception to set.
+     * @see com.cvrskidz.jhop.exceptions.CommandException
+     */
     protected void setError(Exception e) {
         this.error = true;
         
@@ -109,6 +115,14 @@ public abstract class Operation implements Executable{
         }
     }
     
+    /**
+     * Sets the error of this operation to the specified exception, wrapping
+     * it to a CommandException if necessary.
+     * 
+     * @param e The exception to set.
+     * @param prefix A message to preceed the exceptions error message.
+     * @see com.cvrskidz.jhop.exceptions.CommandException
+     */
     protected void setError(Exception e, String prefix) {
         this.error = true;
         
@@ -133,5 +147,11 @@ public abstract class Operation implements Executable{
         return out.toString();
     }
     
+    /**
+     * Setup this operation, performing any necessary preparation or argument validation
+     * to ensure this instance can be executed.
+     * 
+     * @throws CommandException If the operation can not be successfully initiated.
+     */
     protected abstract void init() throws CommandException;
 }

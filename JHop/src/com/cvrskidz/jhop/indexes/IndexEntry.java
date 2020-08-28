@@ -4,6 +4,16 @@ import com.cvrskidz.jhop.network.HopConnection;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * IndexEntry stores the relevant information to perform additional actions
+ * after querying a key inside an index. The entry is used both as the key in a
+ * JHop index as well as a container for related information.
+ * <p>
+ * Examples of additional actions include loading the contents of a page after 
+ * searching for it.
+ * 
+ * @author bcc9954 18031335 cvrskidz
+ */
 public class IndexEntry implements Serializable{
     private final String url, title, src;
     

@@ -27,6 +27,13 @@ public class URLParser implements Parser<HopConnection>{
     private final HopConnection src;                    // valid connection used to correct incomplete URLs
     private HopConnection out;                          // returned connection
     
+    /**
+     * Constructs a new URLParser with the given URl to parse, and a valid source
+     * connection. 
+     * 
+     * @param url The URL to parse
+     * @param src The source connection from which the URL was obtained from.
+     */
     public URLParser(String url, HopConnection src) {
         this.url = url;
         this.src = src;
@@ -147,7 +154,7 @@ public class URLParser implements Parser<HopConnection>{
      * Shorten the given URL. Paths including ".." will traverse the given path to the containing route.
      *
      * @param url the URL to shorten
-     * @return The shotrtened version of the given URL
+     * @return The shortened version of the given URL
      */
     private String descend(String url) {
         StringTokenizer tokens = new StringTokenizer(url, DELIM);

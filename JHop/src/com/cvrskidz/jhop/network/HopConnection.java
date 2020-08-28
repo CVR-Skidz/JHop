@@ -18,6 +18,12 @@ public class HopConnection{
     private final URL url;                      // URL of request
     private final HttpURLConnection connection; // Connection to host
     
+    /**
+     * Constructs a new HopConnection from the given URL.
+     * 
+     * @param src The URL specifying the host to connect to.
+     * @throws IOException If the given source was invalid.
+     */
     public HopConnection(String src) throws IOException {
         url = new URL(src);
         connection = (HttpURLConnection)url.openConnection();

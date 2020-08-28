@@ -4,7 +4,7 @@ import com.cvrskidz.jhop.executables.Crawler;
 
 /**
  * Exception caused by an error preventing a Crawler from crawling additional URLs or guranteeing the integrity of 
- * already cralwed URLs.
+ * already crawled URLs.
  * 
  * @see com.cvrskidz.jhop.executables.Crawler 
  * @author bcc9954 18031335 cvr-skidz 
@@ -32,7 +32,7 @@ public class CrawlerException extends CommandException{
         //Report URL
         out.append("\nError crawling ").append(op.getLastHop().getURLNoProtocol());
         //Report query
-        out.append(" ").append(op.getType()).append(": ").append(op.getId());
+        out.append(" ").append(op.getAttribute()).append(": ").append(op.getValue());
         //Report hopNumber
         out.append("\nFailed on hop: ").append(op.getHop());
         

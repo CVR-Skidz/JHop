@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * Searches an index and returns all matching results based on a search term.
+ * 
  * @author cvr-skidz bcc9954 18031335
  */
 public class Searcher extends SearchOperation{
@@ -14,12 +16,26 @@ public class Searcher extends SearchOperation{
     private final static int PRIORITY = 2, ARGC = 1;
     protected String term;
     
+    /**
+     * Construct a new Searcher. A searcher expects 1 argument, that should
+     * be the search term.
+     * 
+     * @param argv The arguments supplied to the searcher.
+     * @throws CommandException If the supplied arguments were invalid.
+     */
     public Searcher(List<String> argv) throws CommandException{
         super(argv, OPNAME);
         init();
         priority = PRIORITY;
     }
     
+    /**
+     * Display all entries in the supplied index that match this instances search
+     * term.
+     * 
+     * @param index The index to search
+     * @return A reference to the same index after searching.
+     */
     @Override
     public Index exec(Index index) {
         if(index == null) {

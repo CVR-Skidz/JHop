@@ -21,7 +21,6 @@ public class ArgumentException extends CommandException{
      * 
      * @param expected the expected amount of arguments.
      * @param op The command where the error occurred.
-     * @return A new ArgumentException
      * @see ArgumentException
      */
     public ArgumentException(int expected, Operation op) {
@@ -34,7 +33,6 @@ public class ArgumentException extends CommandException{
      * @param type The expected type of the argument.
      * @param arg The violating argument.
      * @param op The command where the error occurred.
-     * @return A new ArgumentException
      * @see ArgumentException
      */
     public ArgumentException(String type, String arg, Operation op) {

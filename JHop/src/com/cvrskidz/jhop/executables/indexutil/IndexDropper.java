@@ -13,15 +13,32 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * An IndexOperation that deletes a persistent index.
+ * 
+ * @author bcc9954 18031335 cvrskidz
+ */
 public class IndexDropper extends IndexOperation{
     public final static String OPNAME = "--drop";
     private final static int PRIORITY = Operation.MASTER_PR;
     
+    /**
+     * Constructs a new IndexDropper. An IndexDropper expects 1 argument.
+     * 
+     * @param argv The arguments supplied to this operation.
+     * @throws CommandException  If the arguments were invalid
+     */
     public IndexDropper(List<String> argv) throws CommandException {
         super(argv, OPNAME);
         this.priority = PRIORITY;
     }
     
+    /**
+     * Delete the specified Index.
+     * 
+     * @param index The Index to delete.
+     * @return A new Index.
+     */
     @Override
     public Index exec(Index index) {
         Deque<IndexOptions> indexes = updatedIndexes();
@@ -33,6 +50,12 @@ public class IndexDropper extends IndexOperation{
         return new Index();
     }
     
+    /**
+     * Remove the Index specified by this instance from JHops configuration.
+     * 
+     * @return A Deque of all the Index Options stored in JHops configuration
+     * after removal.
+     */
     private Deque<IndexOptions> updatedIndexes() {
         Deque<IndexOptions> indexes;
         
@@ -48,6 +71,11 @@ public class IndexDropper extends IndexOperation{
         }
     }
     
+    /**
+     * Write the supplied set of indexes to JHops configuration.
+     * 
+     * @param indexes The indexes JHop should store.
+     */
     private void updateIndexes(Deque<IndexOptions> indexes) {
         try {
             Writer file = new FileWriter(IndexOperation.PATH);

@@ -15,6 +15,9 @@ import com.cvrskidz.jhop.indexes.Index;
 public interface Executable {
     /**
      * Execute the intended functionality of this instance.
+     * 
+     * @param index The index to execute on.
+     * @return The same index after executing this instance.
      */
     public Index exec(Index index);
     
@@ -24,5 +27,8 @@ public interface Executable {
      */
     public Exception getError();
     
+    /**
+     * @return True if an error occurred. False otherwise.
+     */
     public boolean success();
 }

@@ -3,13 +3,14 @@ import com.cvrskidz.jhop.exceptions.CommandException;
 import java.util.List;
 
 /**
- * An executable object to provide a JHop program set functions such as  
- * reading, writing, and encrypting. 
- * <p> A IndexOperationFactory does not create a Set unless 
- the "--create" operation is supplied.
+ * An IndexOperationFactory produces the appropriate IndexOperation from
+ * given command line arguments. 
+ * <p>
+ * An IndexOperationFactory requires a call (option name) and any arguments passed
+ * to this call.
  * 
  * @author cvrskidz bcc9954 18031335
- * @see com.cvrskidz.jhop.Operation
+ * @see IndexOperation
  */
 public class IndexOperationFactory{
     private final String name;
@@ -28,11 +29,13 @@ public class IndexOperationFactory{
     }
     
     /**
-     * Returns a method reference to the correct set operation as specified by
-     * this instances name. Such as "--create", "--set", "--encrypt", and "--drop".
+     * Returns a method reference to the correct index operation as specified by
+     * this instances name. Such as "--create", "--set", and "--drop".
      * 
-     * @return A method reference to the correct set operation or null if this 
+     * @return A reference to the correct IndexOperation or null if this 
      * object contains an unknown operation.
+     * @throws CommandException If the associated operation could not be created.
+     * @see IndexOperation
      */
     public IndexOperation produce() throws CommandException {
         switch(name) {
