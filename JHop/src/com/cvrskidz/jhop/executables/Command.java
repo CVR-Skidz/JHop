@@ -31,6 +31,16 @@ public class Command implements Executable{
     }
     
     /**
+     * Constructs a new Command object with the given operations to execute.
+     * 
+     * @param operations The operations this instance will execute.
+     */
+    public Command(List<Operation> operations) {
+        error = false;
+        this.operations = operations.toArray(new Operation[0]); // convert to array
+    }
+
+    /**
      * Execute this instances operations, ensuring any exception 
      * is thrown back to the calling method.
      * 

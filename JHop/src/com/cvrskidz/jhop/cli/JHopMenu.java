@@ -2,9 +2,16 @@ package com.cvrskidz.jhop.cli;
 
 import com.cvrskidz.jhop.JHop;
 
+/**
+ * A printable menu containing interactive options to 
+ * interact with JHop from within the command line.
+ */
 public class JHopMenu{
     private JHop master;
     
+    /**
+     * Options in the menu.
+     */
     private enum MenuOption {
         SEARCH("Search an index"), 
         CRAWL("Create an index"), 
@@ -21,10 +28,18 @@ public class JHopMenu{
         public String toString() { return message; }
     }
     
+    /**
+     * Construct a new menu.
+     *
+     * @param master An Instance of a JHop application this menu belongs to.
+     */
     public JHopMenu(JHop master) {
         this.master = master;
     }
     
+    /**
+     * Print this menu.
+     */
     public void display() {
         MenuOption[] options = MenuOption.values();
         for(int i = 0; i < options.length; ++i) {
@@ -32,6 +47,9 @@ public class JHopMenu{
         }
     }
     
+    /** 
+     * @return A new Guide based on the selected option.
+     */
     public Guide select(int option) {
         MenuOption[] options = MenuOption.values();
         --option;   //normalize index

@@ -6,9 +6,19 @@ import com.cvrskidz.jhop.executables.indexutil.IndexInspector;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * An interactable guide to list all persistent indexes.
+ *
+ * @author bcc9954 18031335 cvrskidz
+ * @see com.cvrskidz.jhop.executables.indexutil.IndexInspector
+ */
 public class ListGuide extends Guide {
     private Executable inspector;
     
+    /**
+     * Construct a new ListGuide with the given input scanner.
+     * @param input The Scanner instance associated with the parent interface.
+     */
     public ListGuide(Scanner input) {
         super(input);
         inspector = null;
@@ -16,6 +26,7 @@ public class ListGuide extends Guide {
     
     @Override
     public void poll() {
+        // Create inspector
         try {
             ArrayList<String> args = new ArrayList<String>();
             args.add(""); //empty args supplied to inspector
@@ -27,6 +38,9 @@ public class ListGuide extends Guide {
         
     }
     
+    /**
+     * List all persistent indexes.
+     */
     @Override 
     public void display() {
         System.out.println("Indexes: ");

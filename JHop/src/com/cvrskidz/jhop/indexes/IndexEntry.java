@@ -17,19 +17,30 @@ import java.util.Objects;
 public class IndexEntry implements Serializable{
     private final String url, title, src;
     
+    /**
+     * Construct a new IndexEntry with the given url
+     * 
+     * @param url The url to generate the entry from.
+     */
     public IndexEntry(HopConnection url) {
         this.url = url.getURLNoProtocol();
         src = url.getURL();
         title = titleFromUrl();
     }
     
+    /**
+     * Extract the title from the URL stored in this instance.
+     *
+     * @return The title from this instances' URL.
+     */
     private String titleFromUrl() {
-        boolean hasEndPoint = getUrl().contains("/");
-        boolean hasType = getUrl().contains(".");
+        boolean hasEndPoint = getUrl().contains("/");   // is not only a domain
+        boolean hasType = getUrl().contains(".");       // specifies file type etc.
         
+        // substring url to find resource name
         if(hasEndPoint && hasType) {
-            int endPoint = getUrl().lastIndexOf("/");
-            int type = getUrl().lastIndexOf(".");
+            int endPoint = getUrl().lastIndexOf("/");   // disregard route to resource
+            int type = getUrl().lastIndexOf(".");       // extenstion etc. 
             if(type > endPoint) return url.substring(endPoint + 1, type);
             else if(!url.endsWith("/")) return url.substring(endPoint + 1);
         }
@@ -37,14 +48,23 @@ public class IndexEntry implements Serializable{
         return getUrl();
     } 
 
+    /**
+     * @return The url stored in this entry.
+     */
     public String getUrl() {
         return url;
     }
     
+    /**
+     * @return The url stored in this entry including the protocol.
+     */
     public String getSource() {
         return src;
     }
 
+    /**
+     * @return The title of this entry.
+     */
     public String getTitle() {
         return title;
     }
