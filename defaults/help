@@ -1,0 +1,110 @@
+JHop (Java Hop Engine) is an experimental search engine. JHop fulfills the following three operations which I the author consider 
+qualify JHop as a search engine:
+
+	1. Information Acquisition - Web Crawling
+	2. Indexing & Ranking
+	3. Information Retrieval - Searching and displaying web pages
+
+JHop allows a user to build individual indexes to seperate information, as opposed to searching one cumulative index. Using JHop 
+requires the user to instruct JHop to cary out each operation - that is to crawl, index, and search
+
+JHop is best used as a command line tool by passing a string of arguments from within your chosen shell, for example:
+
+java -jar JHop.jar --set {index_name} --search {search_term}
+
+However JHop also provides an interactive command line tool similar to other programs such as fdisk etc.
+
+CREATING AN INDEX
+
+To create an index select option 2.
+
+JHop will crawl web pages (and hop between references contained in web pages) to create an index. A user need not tell JHop to 
+index responses, but only give the required information to start crawling the web. This includes:
+
+	- The URL of the starting web page to crawl from.
+	- A query to indetify which HTML branches contain the content to index.
+	- A hop limit (The number of links to follow from the starting page).
+
+*Note that specifying a hop limit of 0 will not perform any "hops" but still indexes and crawls the starting page*
+ 
+The supplied query is an important detail, based on the query supplied JHop will select the content to index - this is to allow
+control of skipping irrelevant content such as adverts and blob data. This means that you will need to know how to specify an
+appropriate query for the target domain.
+
+*Note links to external sites are not followed, e.g. a site on a different domain than the starting page*
+
+A query consits of an attribute and value. For instance the following element has an attribute of id and a value of content:
+
+<div id="content"> </div>
+
+A query identifies the element to start crawling from, and only elements that are listed in './include' or match the given query
+are included in the crawl. A crawl will stop following a branch of elements in the DOM when both conditions are false.
+
+For example given the following response the lines marked with *'s will be crawled:
+
+Query = class,content
+
+Response = 
+...
+<body>
+	<div class="container">
+		<div class="content">
+*			<p> ...
+*			<ul>
+*				<li>...
+*			</ul>
+*			<div class="content">
+*				<p>...
+*			</div>
+			<div class="extra">
+				<p>...
+			</div>
+		</div>
+		<div class="extra">
+		</div>
+	</div>
+</body>
+
+If you create an index and find very few results, or none at all, it will be because the query is invalid (no matching elements)
+or exists to far up the DOM that no included elements are direct childs of the first match.
+
+In general an easy way to create a query is as follows:
+
+	1. Identify the included elements containing the desired content
+	2. Identify their direct parent
+	3. Identify an attribute and value contained in this parent
+	4. Supply these two tokens as the attribute and value when prompted	
+
+SEARCHING AN INDEX
+
+To search an index select option 3 and identify the desired index name. If there are no results then no indexes exist an you 
+should make one. Then select option 4 and supply the index name, proceeding to select option 1 and follow the prompts.
+
+Note that if your terminal foes not support line wrapping (such as an IDE terminal) you can manually set the display width
+in columns using option 6.
+
+DELETING AN INDEX
+
+To delete an option select option 5, this is the only command that does not provide output. Deleting an index that does not exist
+does nothing. Otherwise the results canbe displayed by selecting option 3.
+
+EXAMPLE INDEXES
+
+A few example indexes have been supplied with JHop, they are described below:
+
+	- CPP: some extracts from the C++ programming language reference. This is not the complete documentation.
+	- Coronavirus: extracts from wikipedia pages related to Coronavirus(es).
+	- Collections: extracts from the Java documentation on the JCF.
+
+To see the options used to generate these indexes consult `./sets`.
+
+To test the functionality of JHop the following is an example query to index the python 3 documentation at the time of writing:
+
+	- URL: 		https://docs.python.org/3/library/array
+	- Attribute: 	class
+	- Value:	section
+	- Limit: 	{Up to the user, recommended: 5-20}
+
+*A note on code blocks: <code> and <pre> tags are not included in the default tag list as many webpages contain duplicate text
+content when they are included. However if you would like to view code blocks add the relevant tage to the `include` file, that
+is pre or code (most likely both)*
