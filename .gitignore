@@ -1,3 +1,16 @@
-/JHop/nbproject/private/
-/JHop/build/
-/JHop/dist/
+# junk from IDE
+nbproject/
+build/
+dist/
+*.log
+*.xml
+manifest.mf
+
+# IO config from JHop
+/sets
+/include
+/Java
+/python arrays
+/CPP
+/Coronavirus
+/help
