@@ -1,40 +1,42 @@
 package com.cvrskidz.jhop.db;
 
-import java.sql.DriverManager;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Scanner;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class IndexConnection {
-    private final String url = "jdbc:derby:db\\JhopIndexes";
+    private SessionFactory sessionFactory;
     
-    private Connection db;
-    
-    public IndexConnection(String uname, String password) {
+    public IndexConnection() {
+        // Build registry to get application session
+        final StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
+        final StandardServiceRegistry registry = registryBuilder.configure().build();
+        
         try {
-            db = DriverManager.getConnection(url, uname, password);
-            System.out.println("Connected with " + db.getMetaData().getDriverName());
+            sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
         }
-        catch (SQLException e) {
-            System.out.println("Could not connect to " + url);
-            do {
-                System.out.println(e.getMessage());
-                e = e.getNextException();
-            } while (e != null);
+        catch (Exception e) {
+            // Clean up
+            StandardServiceRegistryBuilder.destroy(registry);
+            System.out.println(e);
+            e.printStackTrace();
+            sessionFactory = null;
         }
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
     
     public static void main(String[] args) {
         // Testing database connection
-        Scanner input = new Scanner(System.in);
-        
-        System.out.print("Username: ");
-        String uname = input.nextLine();
-        
-        System.out.print("Password: ");
-        String password = input.nextLine();
-
-        System.out.println(uname + " : " + password);
-        new IndexConnection(uname, password);
+        IndexConnection db = new IndexConnection();
+        Session session = db.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.save(new IndexLog("test ", "class", "content"));
+        session.getTransaction().commit();
+        session.close();
     }
 }
