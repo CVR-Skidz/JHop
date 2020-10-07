@@ -1,5 +1,6 @@
 package com.cvrskidz.jhop.cli;
 
+import com.cvrskidz.jhop.db.indexutil.DatabaseIndexDropper;
 import com.cvrskidz.jhop.exceptions.CommandException;
 import com.cvrskidz.jhop.executables.Executable;
 import com.cvrskidz.jhop.executables.indexutil.IndexDropper;
@@ -49,7 +50,8 @@ public class DeleteGuide extends Guide {
         args.add(name);
         
         try {
-            dropper = new IndexDropper(args);
+//            dropper = new IndexDropper(args);
+            dropper = new DatabaseIndexDropper(args);
         }
         catch (CommandException e) {
             System.out.println(e.getMessage());

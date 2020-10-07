@@ -19,8 +19,8 @@ import java.util.StringTokenizer;
  * @author cvrskidz 18031335
  */
 public class Index implements Indexable<Response, IndexEntry>, Serializable{
-    protected Map<String, Set<IndexEntry>> terms;           // map of terms to pages 
-    protected Map<IndexEntry, Map<String, Integer>> pages;  // map of pages to terms & frequency
+    private Map<String, Set<IndexEntry>> terms;           // map of terms to pages 
+    private Map<IndexEntry, Map<String, Integer>> pages;  // map of pages to terms & frequency
     
     private IndexOptions options;   // options of this index
     
@@ -85,8 +85,8 @@ public class Index implements Indexable<Response, IndexEntry>, Serializable{
      * If a URL is supplied instead of a title, if the URL has been indexed 
      * only that entry is returned so that the size of the result is 1. 
      * 
-     * @param page The page name to searh for.
-     * @return A list of IndexEntry(s) that macth the page name.
+     * @param page The page name to search for.
+     * @return A list of IndexEntry(s) that match the page name.
      * @see IndexEntry 
      */
     public List<IndexEntry> getPage(String page) {
@@ -106,10 +106,10 @@ public class Index implements Indexable<Response, IndexEntry>, Serializable{
     }
     
     /**
-     * Return a set of all pages containing the specifie term.
+     * Return a set of all pages containing the specified term.
      * 
      * @param term The term to search for
-     * @return The set of all pages containing the specifie term
+     * @return The set of all pages containing the specified term
      * @see IndexEntry
      */
     public Set<IndexEntry> getPagesContaining(String term) {
@@ -200,5 +200,21 @@ public class Index implements Indexable<Response, IndexEntry>, Serializable{
         }
         
         return out.toString();
+    }
+
+    public Map<String, Set<IndexEntry>> getTerms() {
+        return terms;
+    }
+
+    public Map<IndexEntry, Map<String, Integer>> getPages() {
+        return pages;
+    }
+
+    public void setTerms(Map<String, Set<IndexEntry>> terms) {
+        this.terms = terms;
+    }
+
+    public void setPages(Map<IndexEntry, Map<String, Integer>> pages) {
+        this.pages = pages;
     }
 }

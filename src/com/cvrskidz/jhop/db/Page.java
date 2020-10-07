@@ -3,6 +3,7 @@ package com.cvrskidz.jhop.db;
 import java.io.Serializable;
 
 public class Page implements Serializable{
+    private String indexName;
     private String url;
     private String src;
     private String title;
@@ -11,12 +12,17 @@ public class Page implements Serializable{
         //Hibernate reflection
     }
     
-    public Page(String url, String src, String title) {
+    public Page(String indexName, String url, String src, String title) {
+        this.indexName = indexName;
         this.url = url;
         this.src = src;
         this.title = title;
     }
 
+    public String getIndexName() {
+        return indexName;
+    }
+    
     public String getUrl() {
         return url;
     }
@@ -29,6 +35,10 @@ public class Page implements Serializable{
         return title;
     }
 
+    public void setIndexName(String indexName) {
+        this.indexName = indexName;
+    }
+    
     public void setUrl(String url) {
         this.url = url;
     }

@@ -57,4 +57,8 @@ public class IndexOperationFactory implements JHopFactory<IndexOperation> {
     public String getOperationName() {
         return name;
     }
+
+    public List<String> getArgs() {
+        return args;
+    }
 }

@@ -1,5 +1,6 @@
 package com.cvrskidz.jhop.cli;
 
+import com.cvrskidz.jhop.db.indexutil.DatabaseIndexWriter;
 import com.cvrskidz.jhop.exceptions.CommandException;
 import com.cvrskidz.jhop.executables.Crawler;
 import com.cvrskidz.jhop.executables.Executable;
@@ -122,6 +123,7 @@ public class CreateGuide extends Guide {
         ArrayList<String> args = new ArrayList();
         args.add(n);
         
-        writer = new IndexWriter(args);
+//        writer = new IndexWriter(args);
+        writer = new DatabaseIndexWriter(args);
     }
 }

@@ -1,5 +1,6 @@
 package com.cvrskidz.jhop.cli;
 
+import com.cvrskidz.jhop.db.indexutil.DatabaseIndexReader;
 import com.cvrskidz.jhop.exceptions.CommandException;
 import com.cvrskidz.jhop.executables.Executable;
 import com.cvrskidz.jhop.executables.indexutil.IndexReader;
@@ -41,7 +42,8 @@ public class SetGuide extends Guide {
         args.add(name);
         
         try {
-            reader = new IndexReader(args);
+//            reader = new IndexReader(args);
+            reader = new DatabaseIndexReader(args);
         }
         catch (CommandException e) {
             System.out.println(e.getMessage());
