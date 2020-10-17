@@ -1,11 +1,11 @@
 package com.cvrskidz.jhop;
 
 import com.cvrskidz.jhop.cli.Guide;
-import com.cvrskidz.jhop.cli.Interactable;
 import com.cvrskidz.jhop.cli.JHopMenu;
 import com.cvrskidz.jhop.parsers.ArgumentParser;
 import com.cvrskidz.jhop.executables.Command;
 import com.cvrskidz.jhop.exceptions.CommandException;
+import com.cvrskidz.jhop.gui.view.JHopView;
 import com.cvrskidz.jhop.indexes.Index;
 import java.util.Scanner;
 
@@ -88,9 +88,11 @@ public class JHop extends Guide{
     public static void main(String[] args) {
         //CLI (interactive)
         if(args.length == 0) {
-            Interactable application = new JHop(new Scanner(System.in));
-            application.poll();
-            return;
+//            Interactable application = new JHop(new Scanner(System.in));
+//            application.poll();
+//            return;
+        
+            JHopView.loadView();
         }
         
         //CLI (non blocking)
