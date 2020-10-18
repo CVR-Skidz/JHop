@@ -1,99 +1,48 @@
 package com.cvrskidz.jhop;
 
-import com.cvrskidz.jhop.cli.Guide;
-import com.cvrskidz.jhop.cli.JHopMenu;
 import com.cvrskidz.jhop.parsers.ArgumentParser;
 import com.cvrskidz.jhop.executables.Command;
 import com.cvrskidz.jhop.exceptions.CommandException;
+import com.cvrskidz.jhop.gui.controllers.JHopButtonController;
 import com.cvrskidz.jhop.gui.view.JHopView;
 import com.cvrskidz.jhop.indexes.Index;
-import java.util.Scanner;
+import javax.swing.JFrame;
 
 /**
  * JHop is the main entry point for all JHop program instances. It provides the driving 
  * class to perform all executable operations supplied as command line arguments.
  * <p>
- * Alternatively if no arguments are supplied JHop will launch an interactive CLI using
- * Guide objects to allow the user to interact with the engine in an assisted manner.
+ * Alternatively if no arguments are supplied JHop will launch an interactive GUI.
  * 
  * @author cvrskidz 18031335
- * @see com.cvrskidz.jhop.cli.Guide
  */
-public class JHop extends Guide{
-    private boolean run;
-    private JHopMenu menu;
+public class JHop{
+    private static Index index;
+    private static JFrame window;
     
-    /**
-     * Construct a new JHop Guide with a standard input scanner.
-     * @param input A Scanner of the standard input stream
-     */
-    public JHop(Scanner input) {
-        super(input);
-        run = true;
-        menu = new JHopMenu(this);
-        Guide.index = new Index();  // set active index
-    }
-    
-    /** 
-     * Runs the interactive CLI loop.
-     */
-    @Override
-    public void poll() {
-        displayInfo(); // JHop info
+    public JHop() {
+        JHopView view = new JHopView();
+        JHopButtonController controller = new JHopButtonController(view);
+        controller.linkButtons();
         
-        while(run) {
-            display();      // print menu and active index
-            Integer option; // get user option
-            while((option = parseInt(prompt("\nEnter choice: "))) == null) {
-                System.out.println("Invalid Input");
-            }
-            Guide userAction = menu.select(option);
-            if(userAction != null) {    // run any valid user option
-                System.out.println("");
-                userAction.poll();
-                userAction.display();
-            }
-        }
+        window = new JFrame();
+        window.getContentPane().add(view);
+        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.setSize(JHopView.DEFAULT_WIDTH, JHopView.DEFAULT_HEIGHT);
+        window.setVisible(true);
     }
     
-    /**
-     * Prints this instances JHopMenu and current index.
-     */
-    @Override
-    public void display() {
-        String name = Guide.index.getOptions().getName();
-        
-        System.out.println("");
-        System.out.println("Current Index: " + name);
-        System.out.println("");
-        menu.display();
+    public static Index getActiveIndex() {
+        return index;
     }
     
-    /**
-     * Stop the interactive CLI.
-     */
-    public void stop() {
-        run = false;
-    }
-    
-    /**
-     * Displays simple information about the program.
-     */
-    private void displayInfo() {
-        System.out.println("Java Hop Search Engine");
-        System.out.println("Version 0.1");
-        System.out.println("Author cvrskidz 18031335");
+    public static JFrame getActiveWindow() {
+        return window;
     }
     
     public static void main(String[] args) {
-        //CLI (interactive)
-        if(args.length == 0) {
-//            Interactable application = new JHop(new Scanner(System.in));
-//            application.poll();
-//            return;
-        
-            JHopView.loadView();
-        }
+        //GUI
+        if(args.length == 0) new JHop();
         
         //CLI (non blocking)
         ArgumentParser parser = new ArgumentParser(args);   // argument parser

@@ -1,18 +1,27 @@
 package com.cvrskidz.jhop.gui.view;
 
+import com.cvrskidz.jhop.gui.controllers.JHopOptionsDialogController;
 import javax.swing.JDialog;
+import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JLabel;
 import javax.swing.JTextField;
-import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collection;
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.border.Border;
 
 public class JHopOptionsDialog extends JDialog{
-    Map<String, Option> fields;
-            
+    public static final int MIN_WIDTH = 400;
+    public static final int MIN_HEIGHT = 300;
+    
+    private Map<String, Option> fields;
+    private JFrame owner;
+    private JButton accept, cancel;
+    private JHopOptionsDialogController controller;
+    
     private class Option {
         JTextField field;
         String value;
@@ -21,33 +30,58 @@ public class JHopOptionsDialog extends JDialog{
             this.field = field;
             value = null;
         }
-        
-        public JPanel fieldPanel(String name) {
-            JPanel panel = new JPanel(new BorderLayout());
-            JLabel label = new JLabel(name);
-            panel.add(label, BorderLayout.WEST);
-            panel.add(field, BorderLayout.CENTER);
-            return panel;
-        }
     }
     
-    public JHopOptionsDialog(Collection<String> options) {
-        super();
+    public JHopOptionsDialog(Collection<String> options, JFrame owner) {
+        super(owner);
+        this.owner = owner;
         fields = new HashMap<>();
+        accept = new JButton("Ok");
+        cancel = new JButton("Cancel");
 
+        populate(options);
+        center();
+        controller = new JHopOptionsDialogController(this);
+        setLocation(owner.getX(), owner.getY());
+        setVisible(true);
+    }
+    
+    private void populate(Collection<String> options) {
         JPanel contents = new JHopStackPanel();
         
         for(String option : options) {
             JTextField optionInput = new JTextField();
             Option optionComponents = new Option(optionInput);
             fields.put(option, optionComponents);
-            contents.add(optionComponents.fieldPanel(option));
+            Border border = BorderFactory.createTitledBorder(option);
+            optionInput.setBorder(border);
+            contents.add(optionInput);
         }
         
+        JPanel controls = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        controls.add(accept);
+        controls.add(cancel);
+        contents.add(controls);
         add(contents);
+    }
+    
+    //TODO
+    private void center() {
+        setSize(MIN_WIDTH, MIN_HEIGHT);
+        int offsetX = (owner.getWidth() - getWidth())/2;
+        int offsetY = (owner.getHeight() - getHeight())/2;
+        setLocation(owner.getX() + offsetX, owner.getY() + offsetY);
     }
     
     public String getOption(String name) {
         return fields.get(name).value;
+    }
+    
+    public JButton getAcceptControl() {
+        return accept;
+    }
+    
+    public JButton getCancelControl() {
+        return cancel;
     }
 }

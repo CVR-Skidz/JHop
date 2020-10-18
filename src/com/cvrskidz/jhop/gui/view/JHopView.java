@@ -178,17 +178,4 @@ public class JHopView extends JPanel{
         options.container.add(options.visible);
         updateUI();
     }
-    
-    // stub
-    public static void loadView() {
-        JHopView view = new JHopView();
-        JHopButtonController controller = new JHopButtonController(view);
-        controller.linkButtons();
-        
-        JFrame root = new JFrame();
-        root.getContentPane().add(view);
-        root.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        root.setSize(JHopView.DEFAULT_WIDTH, JHopView.DEFAULT_HEIGHT);
-        root.setVisible(true);
-    }
 }

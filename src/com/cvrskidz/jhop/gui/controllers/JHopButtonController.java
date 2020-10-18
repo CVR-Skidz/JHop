@@ -1,5 +1,6 @@
 package com.cvrskidz.jhop.gui.controllers;
 
+import com.cvrskidz.jhop.JHop;
 import com.cvrskidz.jhop.db.IndexLog;
 import com.cvrskidz.jhop.exceptions.CommandException;
 import com.cvrskidz.jhop.db.indexutil.DatabaseIndexInspector;
@@ -56,7 +57,7 @@ public class JHopButtonController {
             options.add("Attribute");
             options.add("Value");
             options.add("Hop Limit");
-            new JHopOptionsDialog(options).setVisible(true);
+            new JHopOptionsDialog(options, JHop.getActiveWindow());
         });
     }
     
