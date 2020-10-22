@@ -15,6 +15,7 @@ public class Searcher extends SearchOperation{
     public final static String OPNAME = "--search";
     private final static int PRIORITY = 2, ARGC = 1;
     protected String term;
+    private Set<IndexEntry> results;
     
     /**
      * Construct a new Searcher. A searcher expects 1 argument, that should
@@ -27,6 +28,7 @@ public class Searcher extends SearchOperation{
         super(argv, OPNAME);
         init();
         priority = PRIORITY;
+        results = null;
     }
     
     /**
@@ -42,14 +44,8 @@ public class Searcher extends SearchOperation{
             setError(new CommandException("Index is empty", name));
         }
         else {
-            Set<IndexEntry> results = index.getPagesContaining(term);
-            
-            if(results == null) System.out.println("No results found");
-            else {
-                searchResults = results.size();
-                System.out.println(searchResults + " results");
-                for(IndexEntry page: results) System.out.println(page);
-            }
+            results = index.getPagesContaining(term);
+            if(results != null) searchResults = results.size();
         }
         
         return index;
@@ -59,5 +55,9 @@ public class Searcher extends SearchOperation{
     protected void init() throws CommandException {
         if(argc != ARGC) throw new ArgumentException(ARGC, this);
         else term = argv.get(0);
+    }
+    
+    public Set<IndexEntry> getResults() {
+        return results;
     }
 }

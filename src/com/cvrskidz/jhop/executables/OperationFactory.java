@@ -1,6 +1,6 @@
 package com.cvrskidz.jhop.executables;
 
-import com.cvrskidz.jhop.executables.indexutil.IndexOperationFactory;
+import com.cvrskidz.jhop.indexutil.IndexOperationFactory;
 import com.cvrskidz.jhop.exceptions.CommandException;
 import java.util.List;
 

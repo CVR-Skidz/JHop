@@ -1,11 +1,16 @@
 package com.cvrskidz.jhop;
 
+import com.cvrskidz.jhop.gui.models.Model;
 import com.cvrskidz.jhop.parsers.ArgumentParser;
 import com.cvrskidz.jhop.executables.Command;
 import com.cvrskidz.jhop.exceptions.CommandException;
 import com.cvrskidz.jhop.gui.controllers.JHopButtonController;
+import com.cvrskidz.jhop.gui.controllers.JHopListController;
+import com.cvrskidz.jhop.gui.controllers.Controller;
 import com.cvrskidz.jhop.gui.view.JHopView;
 import com.cvrskidz.jhop.indexes.Index;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 
 /**
@@ -17,23 +22,33 @@ import javax.swing.JFrame;
  * @author cvrskidz 18031335
  */
 public class JHop{
-    private static Index index;
     private static JFrame window;
     
     public JHop() {
-        JHopView view = new JHopView();
-        JHopButtonController controller = new JHopButtonController(view);
-        controller.linkButtons();
+        //Initiate model by connecting to database
+        Model.connectDB();
         
+        //Initiate view
+        JHopView view = new JHopView();
+        Model.observer = view;
+        Controller btnController = new JHopButtonController(view);
+        Controller lstController = new JHopListController(view);
+        btnController.link();
+        lstController.link();
+        
+        //Display view
         window = new JFrame();
         window.getContentPane().add(view);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        window.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Model.disconnectDB();
+                System.exit(0);
+            }
+        });
+        
         window.setSize(JHopView.DEFAULT_WIDTH, JHopView.DEFAULT_HEIGHT);
         window.setVisible(true);
-    }
-    
-    public static Index getActiveIndex() {
-        return index;
     }
     
     public static JFrame getActiveWindow() {

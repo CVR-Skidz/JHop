@@ -1,4 +1,4 @@
-package com.cvrskidz.jhop.executables.indexutil;
+package com.cvrskidz.jhop.indexutil;
 
 import com.cvrskidz.jhop.exceptions.ArgumentException;
 import com.cvrskidz.jhop.exceptions.CommandException;

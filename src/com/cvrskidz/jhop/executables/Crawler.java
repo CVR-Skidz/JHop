@@ -73,7 +73,6 @@ public class Crawler extends Operation{
         try {
             sourceConnection = new HopConnection(source);
             crawl(sourceConnection, index);
-            //System.out.println(index);    // display index after crawling?
         }
         catch(IOException e) {
             setError(e);
@@ -116,9 +115,6 @@ public class Crawler extends Operation{
             if(!hops.isEmpty()) crawl(hops.pop(), index);
             return;
         }
-        
-        // status message
-        System.out.println(currentHop + ": Crawling " + url.getURL());
         
         try{
             url.connect();                              // connect to host

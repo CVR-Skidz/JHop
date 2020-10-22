@@ -1,4 +1,4 @@
-package com.cvrskidz.jhop.executables.indexutil;
+package com.cvrskidz.jhop.indexutil;
 import com.cvrskidz.jhop.exceptions.CommandException;
 import java.util.List;
 import com.cvrskidz.jhop.executables.JHopFactory;
@@ -22,7 +22,7 @@ public class IndexOperationFactory implements JHopFactory<IndexOperation> {
      * 
      * @param argv Operation arguments.
      * @param call Operation name.
-     * @see com.cvrskidz.jhop.executables.indexutil.IndexOperation 
+     * @see com.cvrskidz.jhop.indexutil.IndexOperation 
      */
     public IndexOperationFactory(List<String> argv, String call) {
         name = call;
