@@ -2,6 +2,13 @@ package com.cvrskidz.jhop.db;
 
 import java.io.Serializable;
 
+/**
+ * A Term contains the Java Object mapping for rows in the TERM table of the JHop 
+ * database. It contains getter(s) and setter(s) for each column of the table
+ * (indexName, term, page, and frequency), their mappings can be found in Indexes.hbm.xml.
+ * 
+ * @author cvrskidz 18031335
+ */
 public class Term implements Serializable{
     private String indexName;
     private String term;

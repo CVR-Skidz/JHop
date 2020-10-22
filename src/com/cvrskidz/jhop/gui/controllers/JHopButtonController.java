@@ -1,37 +1,37 @@
 package com.cvrskidz.jhop.gui.controllers;
 
 import com.cvrskidz.jhop.JHop;
-import com.cvrskidz.jhop.db.IndexLog;
-import com.cvrskidz.jhop.exceptions.CommandException;
-import com.cvrskidz.jhop.db.indexutil.DatabaseIndexInspector;
+import com.cvrskidz.jhop.gui.models.ListModel;
+import com.cvrskidz.jhop.gui.models.Model;
+import com.cvrskidz.jhop.gui.models.DeleteModel;
+import com.cvrskidz.jhop.gui.models.SearchModel;
 import com.cvrskidz.jhop.gui.view.JHopOptionsDialog;
 import com.cvrskidz.jhop.gui.view.JHopView;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.JButton;
 
-public class JHopButtonController {
-    private JHopView view;
-    
-    public JHopButtonController(JHopView v) {
-        view = v;
+public class JHopButtonController extends JHopController{
+    public JHopButtonController(JHopView view) {
+        super(view);
         
-        try {
-            populateIndexes();
-        }
-        catch (CommandException e) {
-            //stub
+        if(!Model.isActive()) {
+            Model populator = new ListModel();
+            populator.update();
         }
     }
     
-    public JHopButtonController linkButtons() {
-        linkHideButton();
-        linkShowButton();
-        linkAddButton();
-        return this;
+    @Override
+    public void link() {
+        linkHideButton((JHopView)view);
+        linkShowButton((JHopView)view);
+        linkAddButton((JHopView)view);
+        linkDropButton((JHopView)view);
+        linkSearchButton((JHopView)view);
     }
     
-    private void linkHideButton() {
+    private void linkHideButton(JHopView view) {
         JButton hide = view.getHideControl();
         
         hide.addActionListener((ActionListener)(e) -> { 
@@ -39,7 +39,7 @@ public class JHopButtonController {
         });
     }
     
-    private void linkShowButton() {
+    private void linkShowButton(JHopView view) {
         JButton show = view.getShowControl();
         
         show.addActionListener((ActionListener)(e) -> {
@@ -47,26 +47,43 @@ public class JHopButtonController {
         });
     }
     
-    private void linkAddButton() {
+    private void linkAddButton(JHopView view) {
         JButton add = view.getAddControl();
         
         add.addActionListener((ActionListener)(e)->{
-            ArrayList options = new ArrayList();
-            options.add("Name");
-            options.add("Source");
-            options.add("Attribute");
-            options.add("Value");
-            options.add("Hop Limit");
-            new JHopOptionsDialog(options, JHop.getActiveWindow());
+            //Prevent mulitple threads accessing the model
+            if(Model.isActive()) return;
+            
+            ArrayList<String> options = new ArrayList(Arrays.asList(new String[] {
+                "Name", "Source", "Attribute", "Value", "Hop Limit"
+            }));
+            
+            new JHopOptionsDialog(options, JHop.getActiveWindow());           
         });
     }
     
-    private void populateIndexes() throws CommandException{
-        ArrayList<String> args = new ArrayList();   
-        args.add("");   //empty arguments
-        DatabaseIndexInspector operation = new DatabaseIndexInspector(args);
-        operation.exec(null);
+    private void linkDropButton(JHopView view) {
+        JButton drop = view.getDropControl();
         
-        for(IndexLog i : operation.getResults()) view.addIndexName(i.getIndexName());
+        drop.addActionListener((ActionListener)(e)->{
+            if(Model.isActive()) return;
+            String name = view.getSelectedIndex();
+            
+            if(name != null) {
+                Model delete = new DeleteModel();
+                delete.update(name);
+            }
+        });
+    }
+    
+    private void linkSearchButton(JHopView view) {
+        JButton search = view.getSearchControl();
+        search.addActionListener((ActionListener)(e) -> {
+            if(Model.isActive()) return;
+
+            String term = view.getSearchBar().getText();
+            Model searcher = new SearchModel();
+            searcher.update(term);
+        });
     }
 }

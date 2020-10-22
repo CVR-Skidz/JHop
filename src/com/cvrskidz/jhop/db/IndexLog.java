@@ -2,10 +2,17 @@ package com.cvrskidz.jhop.db;
 
 import java.io.Serializable;
 
+/**
+ * An IndexLog contains the Java Object mapping for rows in the DRIECTORY table
+ * of the JHop database. It contains getter(s) and setter(s) for each column of the table
+ * (indexName, tag, and attribute), their mappings can be found in Indexes.hbm.xml.
+ * 
+ * @author cvrskidz 18031335
+ */
 public class IndexLog implements Serializable{
-    private String indexName;
-    private String tag;
-    private String attribute;
+    private String indexName;   // The name of the index
+    private String tag;         // The tag query of the index
+    private String attribute;   // The value query of the index
     
     public IndexLog() {
         //Hibernate reflection

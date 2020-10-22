@@ -1,6 +1,6 @@
 package com.cvrskidz.jhop.db.indexutil;
 
-import com.cvrskidz.jhop.executables.indexutil.IndexReader;
+import com.cvrskidz.jhop.indexutil.IndexReader;
 import com.cvrskidz.jhop.db.*;
 import com.cvrskidz.jhop.exceptions.CommandException;
 import com.cvrskidz.jhop.indexes.Index;
@@ -16,9 +16,16 @@ import java.util.Set;
 public class DatabaseIndexReader extends IndexReader {
     private IndexConnection db;
     
-    public DatabaseIndexReader(List<String> argv) throws CommandException{
+    /**
+     * Create a DatabaseIndexReader.
+     * 
+     * @param argv The arguments supplied to the --set command
+     * @param db The connected database
+     * @throws CommandException If there was an error creating this object.
+     */
+    public DatabaseIndexReader(List<String> argv, IndexConnection db) throws CommandException {
         super(argv);
-        db = new IndexConnection();
+        this.db = db;
     }
     
     @Override
@@ -36,7 +43,7 @@ public class DatabaseIndexReader extends IndexReader {
         index.getOptions().setName(indexName);
         index.getOptions().setQuery(result.getTag(), result.getAttribute());
         
-        
+        //populate index
         try {
             fillIndex(index);
             return index;
@@ -47,14 +54,17 @@ public class DatabaseIndexReader extends IndexReader {
         }
     }
     
+    /**
+     * populate the given index with its mapped results in the database.
+     * 
+     * @param index The index to populate.
+     * @throws IOException If there was an error populating the index.
+     */
     private void fillIndex(Index index) throws IOException{
         String termsQuery = "FROM Term WHERE index_name='" + indexName + "'";
         List<Term> terms = DatabaseHelper.execute(db, termsQuery);
-
-        // term -> page
-        Map<String, Set<IndexEntry>> indexTerms = new HashMap();
-        // page -> (term -> frequency)
-        Map<IndexEntry, Map<String, Integer>> indexPages = new HashMap();
+        Map<String, Set<IndexEntry>> indexTerms = new HashMap();  // term -> page
+        Map<IndexEntry, Map<String, Integer>> indexPages = new HashMap(); // page -> (term -> frequency)
         
         //load index contents
         for(Term t : terms) {
@@ -62,15 +72,10 @@ public class DatabaseIndexReader extends IndexReader {
             String pageURL = t.getPage();
             
             //get page source
-            String pageQuery = "FROM Page WHERE url='" + pageURL + "' AND "
-                    + "index_name='" + indexName + "'";
-            Page page = (Page) DatabaseHelper.execute(db, pageQuery).get(0);
-            HopConnection con = new HopConnection(page.getSrc());
-            IndexEntry entry = new IndexEntry(con);
-            
+            IndexEntry entry = getPage(pageURL);
             //add term and add it's page
             Set<IndexEntry> termPages = indexTerms.get(t.getTerm()); 
-            if( termPages == null) {
+            if(termPages == null) {
                 termPages = new HashSet();
                 termPages.add(entry);
                 indexTerms.put(term, termPages);
@@ -81,9 +86,7 @@ public class DatabaseIndexReader extends IndexReader {
             Map<String, Integer> pageTerms = indexPages.get(entry);
             int frequency = 1;
             
-            if(pageTerms == null) { //add
-                pageTerms = new HashMap();
-            }
+            if(pageTerms == null) pageTerms = new HashMap(); //add
             else {  //update
                 Integer indexedFrequency = pageTerms.get(term);
                 if(indexedFrequency != null) frequency += indexedFrequency;
@@ -95,5 +98,20 @@ public class DatabaseIndexReader extends IndexReader {
         
         index.setTerms(indexTerms);
         index.setPages(indexPages);
+    }
+    
+    /**
+     * Create and IndexEntry for the queried page.
+     * 
+     * @param pageURL The URL of the page
+     * @return The new IndexEntry
+     * @throws IOException If the page could not be connected to
+     */
+    private IndexEntry getPage(String pageURL) throws IOException {
+            String pageQuery = "FROM Page WHERE url='" + pageURL + "' AND "
+                    + "index_name='" + indexName + "'";
+            Page page = (Page) DatabaseHelper.execute(db, pageQuery).get(0);
+            HopConnection con = new HopConnection(page.getSrc());
+            return new IndexEntry(con);
     }
 }

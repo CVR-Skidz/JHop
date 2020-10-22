@@ -1,42 +1,52 @@
 package com.cvrskidz.jhop.db;
 
+import java.util.logging.Level;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
+/**
+ * An IndexConnection connects a JHop application to the JHop database with
+ * hibernate, and creates a session for the application.
+ * 
+ * @author cvrskidz 18031335
+ */
 public class IndexConnection {
-    private SessionFactory sessionFactory;
+    private Session session;
+    private SessionFactory sessionFactory; 
     
+    /**
+     * Create a connection to the JHop database.
+     */
     public IndexConnection() {
+        java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.OFF);
         // Build registry to get application session
         final StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder();
         final StandardServiceRegistry registry = registryBuilder.configure().build();
         
         try {
             sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+            session = sessionFactory.openSession();
         }
-        catch (Exception e) {
+        catch (HibernateException e) {
             // Clean up
             StandardServiceRegistryBuilder.destroy(registry);
-            System.out.println(e);
-            e.printStackTrace();
-            sessionFactory = null;
+            System.out.println(e.getMessage());
         }
     }
 
-    public SessionFactory getSessionFactory() {
-        return sessionFactory;
+    /**
+     * @return The session connected to the JHop database.
+     */
+    public Session getSession() {
+        return session;
     }
     
-    public static void main(String[] args) {
-        // Testing database connection
-        IndexConnection db = new IndexConnection();
-        Session session = db.getSessionFactory().openSession();
-        session.beginTransaction();
-        session.save(new IndexLog("test ", "class", "content"));
-        session.getTransaction().commit();
+    public void reloadSession() {
         session.close();
+        session = sessionFactory.openSession();
     }
 }
