@@ -27,7 +27,7 @@ public class ListModel extends Model {
         if(error == null) {
             // Update observer
             for(IndexLog i : ((DatabaseIndexInspector)inspector).getResults()) {
-                Model.observer.addIndexName(i.getIndexName());
+                Model.observer.getSideBar().addIndex(i.getIndexName());
             }
 
             if(!inspector.success()) {

@@ -4,6 +4,7 @@ import com.cvrskidz.jhop.db.indexutil.DatabaseIndexWriter;
 import com.cvrskidz.jhop.exceptions.CommandException;
 import com.cvrskidz.jhop.executables.Crawler;
 import com.cvrskidz.jhop.executables.Executable;
+import com.cvrskidz.jhop.gui.view.JHopDetailsView;
 import com.cvrskidz.jhop.indexes.Index;
 import java.util.ArrayList;
 
@@ -32,9 +33,10 @@ public class CreateModel extends Model {
     @Override
     public void alert() {
         if(error == null) {
-            Model.observer.addIndexName(name);  //add the index name to the view
-            Model load = new LoadModel();       //load the pages of the new index into the view
-            load.alert();                       //load without reading a new index
+            JHopDetailsView sideBar = Model.observer.getSideBar();
+            sideBar.addIndex(name);         //add the index name to the view
+            Model load = new LoadModel();   //load the pages of the new index into the view
+            load.alert();                   //load without reading a new index
         }
         else {
             Model.observer.showError(error.getMessage());

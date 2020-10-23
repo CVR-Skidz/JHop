@@ -2,6 +2,7 @@ package com.cvrskidz.jhop.gui.models;
 
 import com.cvrskidz.jhop.db.indexutil.DatabaseIndexReader;
 import com.cvrskidz.jhop.exceptions.CommandException;
+import com.cvrskidz.jhop.gui.view.JHopDetailsView;
 import com.cvrskidz.jhop.indexes.IndexEntry;
 import java.util.ArrayList;
 
@@ -30,12 +31,13 @@ public class LoadModel extends Model{
         
         // Update observers' active indexes
         String name = Model.index.getOptions().getName();
-        Model.observer.setIndexName(name);
+        JHopDetailsView sideBar = Model.observer.getSideBar();
+        sideBar.setIndexName(name);
         
         // Update obseervers' active index page registry
-        Model.observer.clearPages();
+        sideBar.clearPages();
         for(IndexEntry e : Model.index.getPages().keySet()) {
-            Model.observer.addPage(e);
+            sideBar.addPage(e);
         }
     }
 

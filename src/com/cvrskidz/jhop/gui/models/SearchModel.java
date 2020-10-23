@@ -4,6 +4,7 @@ import com.cvrskidz.jhop.exceptions.CommandException;
 import com.cvrskidz.jhop.executables.Searchable;
 import com.cvrskidz.jhop.executables.Searcher;
 import com.cvrskidz.jhop.gui.view.JHopView;
+import com.cvrskidz.jhop.gui.view.JHopWebView;
 import com.cvrskidz.jhop.indexes.IndexEntry;
 import java.util.ArrayList;
 
@@ -31,13 +32,14 @@ public class SearchModel extends Model {
             return;
         }
         
-        Model.observer.clearResults();
+        JHopWebView display = Model.observer.getDisplay();
+        display.clearResults();
         if(searcher.results() == 0) return;
         
         //Populate the results view with search results
         for(IndexEntry e : ((Searcher)searcher).getResults()) {
-            Model.observer.addResult(e);                
-            Model.observer.getDisplay().switchTo(JHopView.RESULTS_LABEL);   //Switch to results
+            display.addResult(e);                
+            display.getCanvas().switchTo(JHopView.RESULTS_LABEL);   //Switch to results
         }
     }
     

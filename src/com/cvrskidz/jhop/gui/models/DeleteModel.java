@@ -3,6 +3,7 @@ package com.cvrskidz.jhop.gui.models;
 import com.cvrskidz.jhop.db.indexutil.DatabaseIndexDropper;
 import com.cvrskidz.jhop.exceptions.CommandException;
 import com.cvrskidz.jhop.executables.Executable;
+import com.cvrskidz.jhop.gui.view.JHopDetailsView;
 import com.cvrskidz.jhop.gui.view.JHopView;
 import com.cvrskidz.jhop.indexes.Index;
 import java.util.ArrayList;
@@ -39,10 +40,11 @@ public class DeleteModel extends Model {
             Model.observer.showError(error.getMessage());
         }
         else {
-            Model.observer.removeIndexName(name);
+            JHopDetailsView sideBar = Model.observer.getSideBar();
+            sideBar.removeIndex(name);
             if(replace) {
-                Model.observer.setIndexName(JHopView.DEFAULT_NAME);
-                Model.observer.clearPages();
+                sideBar.setIndexName(JHopView.DEFAULT_NAME);
+                sideBar.clearPages();
             }
         }
 

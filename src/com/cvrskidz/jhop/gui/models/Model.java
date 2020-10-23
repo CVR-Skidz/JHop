@@ -82,7 +82,7 @@ public abstract class Model implements Observable, Runnable{
      * observer to toggle any progress indicators.
      */
     protected static void toggleActive() {
-        Model.observer.toggleProgress();
+        Model.observer.getSideBar().toggleProgress();
         active = !active;
     }
     

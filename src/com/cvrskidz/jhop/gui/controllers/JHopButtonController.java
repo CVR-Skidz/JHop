@@ -5,8 +5,10 @@ import com.cvrskidz.jhop.gui.models.ListModel;
 import com.cvrskidz.jhop.gui.models.Model;
 import com.cvrskidz.jhop.gui.models.DeleteModel;
 import com.cvrskidz.jhop.gui.models.SearchModel;
+import com.cvrskidz.jhop.gui.view.JHopDetailsView;
 import com.cvrskidz.jhop.gui.view.JHopOptionsDialog;
 import com.cvrskidz.jhop.gui.view.JHopView;
+import com.cvrskidz.jhop.gui.view.JHopWebView;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,23 +34,26 @@ public class JHopButtonController extends JHopController{
     }
     
     private void linkHideButton(JHopView view) {
-        JButton hide = view.getHideControl();
+        JHopDetailsView sideBar = view.getSideBar();
+        JButton hide = sideBar.getHideControl();
         
         hide.addActionListener((ActionListener)(e) -> { 
-            view.hideSideBar();    
+            sideBar.collapse();
         });
     }
     
     private void linkShowButton(JHopView view) {
-        JButton show = view.getShowControl();
+        JHopDetailsView sideBar = view.getSideBar();
+        JButton show = sideBar.getShowControl();
         
-        show.addActionListener((ActionListener)(e) -> {
-            view.showSideBar();
+        show.addActionListener((ActionListener)(e) -> { 
+            sideBar.expand();
         });
     }
     
     private void linkAddButton(JHopView view) {
-        JButton add = view.getAddControl();
+        JHopDetailsView sideBar = view.getSideBar();
+        JButton add = sideBar.getAddControl();
         
         add.addActionListener((ActionListener)(e)->{
             //Prevent mulitple threads accessing the model
@@ -63,11 +68,12 @@ public class JHopButtonController extends JHopController{
     }
     
     private void linkDropButton(JHopView view) {
-        JButton drop = view.getDropControl();
+        JHopDetailsView sideBar = view.getSideBar();
+        JButton drop = sideBar.getDropControl();
         
         drop.addActionListener((ActionListener)(e)->{
             if(Model.isActive()) return;
-            String name = view.getSelectedIndex();
+            String name = sideBar.getSelectedIndex();
             
             if(name != null) {
                 Model delete = new DeleteModel();
@@ -77,11 +83,13 @@ public class JHopButtonController extends JHopController{
     }
     
     private void linkSearchButton(JHopView view) {
-        JButton search = view.getSearchControl();
+        JHopWebView searchContainer = view.getDisplay();
+        JButton search = searchContainer.getSearchControl();
+        
         search.addActionListener((ActionListener)(e) -> {
             if(Model.isActive()) return;
 
-            String term = view.getSearchBar().getText();
+            String term = searchContainer.getSearchBar().getText();
             Model searcher = new SearchModel();
             searcher.update(term);
         });
