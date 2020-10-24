@@ -12,12 +12,21 @@ import com.cvrskidz.jhop.gui.view.JHopWebView;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import javax.swing.JButton;
 
+/**
+ * A JHopButtonController contains all the logic to link a JHop GUI's controls
+ * to their appropriate actions. Specifically all buttons included in the default
+ * JHopView are provided listeners in this class.
+ * 
+ * @author cvrskidz 18031335
+ */
 public class JHopButtonController extends JHopController{
     public JHopButtonController(JHopView view) {
         super(view);
         
+        //load all available indexes on start
         if(!Model.isActive()) {
             Model populator = new ListModel();
             populator.update();
@@ -33,6 +42,12 @@ public class JHopButtonController extends JHopController{
         linkSearchButton((JHopView)view);
     }
     
+    /**
+     * Link the "menu hide" button in a default view to an event collapsing
+     * the side bar of the interface.
+     * 
+     * @param view The given view of the JHop GUI.
+     */
     private void linkHideButton(JHopView view) {
         JHopDetailsView sideBar = view.getSideBar();
         JButton hide = sideBar.getHideControl();
@@ -42,6 +57,12 @@ public class JHopButtonController extends JHopController{
         });
     }
     
+    /**
+     * Link the "menu show" button in a default view to an event expanding
+     * the side bar of the interface.
+     * 
+     * @param view The given view of the JHop GUI.
+     */
     private void linkShowButton(JHopView view) {
         JHopDetailsView sideBar = view.getSideBar();
         JButton show = sideBar.getShowControl();
@@ -51,27 +72,46 @@ public class JHopButtonController extends JHopController{
         });
     }
     
+    /**
+     * Link the "add" button in a default view to an event that triggers a 
+     * dialog to create a new index.
+     * 
+     * @param view The given view of the JHop GUI.
+     */
     private void linkAddButton(JHopView view) {
         JHopDetailsView sideBar = view.getSideBar();
         JButton add = sideBar.getAddControl();
         
-        add.addActionListener((ActionListener)(e)->{
+        ActionListener response = (ActionListener)(e)->{
             //Prevent mulitple threads accessing the model
             if(Model.isActive()) return;
             
-            ArrayList<String> options = new ArrayList(Arrays.asList(new String[] {
+            //populate options
+            String[] optionNames = new String[] {
                 "Name", "Source", "Attribute", "Value", "Hop Limit"
-            }));
+            };
             
+            List<String> options = new ArrayList(Arrays.asList(optionNames));
+            
+            // launch dialog
             new JHopOptionsDialog(options, JHop.getActiveWindow());           
-        });
+        };
+        
+        add.addActionListener(response);
     }
     
+    /**
+     * Link the "drop" button in a default view to an event that triggers a 
+     * new delete model.
+     * 
+     * @param view The given view of the JHop GUI.
+     */
     private void linkDropButton(JHopView view) {
         JHopDetailsView sideBar = view.getSideBar();
         JButton drop = sideBar.getDropControl();
         
-        drop.addActionListener((ActionListener)(e)->{
+        ActionListener response = (ActionListener)(e)->{
+            //prevent access to model if not free
             if(Model.isActive()) return;
             String name = sideBar.getSelectedIndex();
             
@@ -79,19 +119,30 @@ public class JHopButtonController extends JHopController{
                 Model delete = new DeleteModel();
                 delete.update(name);
             }
-        });
+        };
+        
+        drop.addActionListener(response);
     }
     
+    /**
+     * Link the "search" button in a default view to an event that triggers a 
+     * search of the active index.
+     * 
+     * @param view The given view of the JHop GUI.
+     */ 
     private void linkSearchButton(JHopView view) {
         JHopWebView searchContainer = view.getDisplay();
         JButton search = searchContainer.getSearchControl();
         
-        search.addActionListener((ActionListener)(e) -> {
+        ActionListener response = (ActionListener)(e) -> {
+            // access only if model is free
             if(Model.isActive()) return;
 
             String term = searchContainer.getSearchBar().getText();
             Model searcher = new SearchModel();
             searcher.update(term);
-        });
+        };
+        
+        search.addActionListener(response);
     }
 }

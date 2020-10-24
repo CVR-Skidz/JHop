@@ -13,6 +13,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * A DtabaseIndexReader is a specialization of an index reader that constructs
+ * an index from persistent data stored in JHop's database.
+ * 
+ * @author cvrskidz 18031335
+ */
 public class DatabaseIndexReader extends IndexReader {
     private IndexConnection db;
     

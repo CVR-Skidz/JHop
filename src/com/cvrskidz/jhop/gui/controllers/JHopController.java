@@ -14,10 +14,20 @@ import java.awt.Container;
 public abstract class JHopController implements Controller{
     protected Container view;
     
+    /**
+     * Create a new controller for the specified view.
+     * 
+     * @param view The given GUI view.
+     */
     public JHopController(JHopView view) {
         this.view = view;
     }
     
+    /**
+     * Create a new controller for the specified dialog.
+     * 
+     * @param view The given dialog view.
+     */
     public JHopController(JHopOptionsDialog view) {
         this.view = view;
     }

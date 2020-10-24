@@ -1,27 +1,19 @@
 package com.cvrskidz.jhop.gui.view;
 
-import com.cvrskidz.jhop.JHop;
-import com.cvrskidz.jhop.indexes.IndexEntry;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import javafx.application.Platform;
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.border.Border;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
+/**
+ * A JHopView contains all the necessary UI components for a JHop GUI. It provides
+ * nothing but a view of the JHop program and should be used within an MVC pattern
+ * to link the supplied controls to JHop Executables.
+ * <p>
+ * The view itself is made of two groups of components, the display (web view and searching)
+ * as well as the side bar (details and options).
+ * 
+ * @author cvrskidz 18031335
+ */
 public class JHopView extends JPanel{
     public static int DEFAULT_WIDTH = 1000;
     public static int DEFAULT_HEIGHT = 800;

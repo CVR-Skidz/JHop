@@ -66,22 +66,15 @@ public class DatabaseIndexWriter extends IndexWriter{
     private void indexContents(Index index) {
         // add pages to PAGE
         for(IndexEntry page : index.getPages().keySet()) {
-//            if(!DatabaseHelper.dbContainsPage(db, page.getUrl(), indexName)) {
-                //only add new pages (no need to update pre-existing ones)
-                Page pageRecord = new Page(indexName, page.getUrl(), 
-                    page.getSource(), page.getTitle());
-                DatabaseHelper.save(db, pageRecord);
-//            }
+            Page pageRecord = new Page(indexName, page.getUrl(), 
+                page.getSource(), page.getTitle());
+            DatabaseHelper.save(db, pageRecord);
             
             // add terms to TERM
             Map<String, Integer> pageTerms = index.getPages().get(page);
             for(String term : pageTerms.keySet()) {
                 Term termRecord = new Term(indexName, term, page.getUrl(), pageTerms.get(term));
-
-//                if(DatabaseHelper.dbContainsTerm(db, term, page.getUrl()))  //update
-//                    DatabaseHelper.update(db, termRecord);
-//                else //add
-                    DatabaseHelper.save(db, termRecord);
+                DatabaseHelper.save(db, termRecord);
             }
         }
     } 

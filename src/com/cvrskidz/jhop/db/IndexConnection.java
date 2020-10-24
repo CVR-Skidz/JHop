@@ -45,6 +45,9 @@ public class IndexConnection {
         return session;
     }
     
+    /**
+     * Close and reopen the active database session of this instance.
+     */
     public void reloadSession() {
         session.close();
         session = sessionFactory.openSession();
