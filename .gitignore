@@ -1,16 +1,4 @@
-# junk from IDE
-nbproject/
+# output from build
 build/
 dist/
 *.log
-*.xml
-manifest.mf
-
-# IO config from JHop
-/sets
-/include
-/Java
-/python arrays
-/CPP
-/Coronavirus
-/help

@@ -44,7 +44,7 @@ public class JHopTest {
      * Test whether a URL can successfully be crawled to populate a database.
      */
     @Test
-    public void crawling() {
+    public void testRemoteCrawling() {
         Index index = new Index();
         index.getOptions().setName(TEST_NAME);
         
@@ -61,12 +61,11 @@ public class JHopTest {
         }
     }
     
-    
     /**
      * Test whether an index can successfully be written to the database.
      */
     @Test
-    public void creating() {
+    public void testIndexWriting() {
         Index index = new Index();
         index.getOptions().setName(TEST_NAME);
                 
@@ -101,7 +100,7 @@ public class JHopTest {
      * A simple to test to ensure the index can query the test term.
      */
     @Test
-    public void searching() {
+    public void testIndexSearching() {
         try {
             createDummy();
         }
@@ -135,7 +134,7 @@ public class JHopTest {
      * Test whether an index can be read from the database.
      */
     @Test
-    public void reading() {
+    public void testIndexReading() {
         try {
             createDummy();
         }
@@ -171,7 +170,7 @@ public class JHopTest {
      * Test whether a database can drop an index
      */
     @Test
-    public void dropping() {
+    public void testIndexDropping() {
         try {
             createDummy();
         }
