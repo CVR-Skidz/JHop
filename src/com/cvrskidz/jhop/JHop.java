@@ -8,9 +8,11 @@ import com.cvrskidz.jhop.gui.controllers.JHopButtonController;
 import com.cvrskidz.jhop.gui.controllers.JHopListController;
 import com.cvrskidz.jhop.gui.controllers.Controller;
 import com.cvrskidz.jhop.gui.view.JHopView;
+import com.cvrskidz.jhop.gui.view.JHopViewConstants;
 import com.cvrskidz.jhop.indexes.Index;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.lang.Thread.UncaughtExceptionHandler;
 import javax.swing.JFrame;
 
 /**
@@ -23,20 +25,45 @@ import javax.swing.JFrame;
  */
 public class JHop{
     private static JFrame window;
+    private JHopView view;
     
     public JHop() {
         //Initiate model by connecting to database
         Model.connectDB();
         
         //Initiate view
-        JHopView view = new JHopView();
+        initMVC();
+        
+        //Display view
+        initWindow();
+        window.setVisible(true);
+        
+        // Handle uncaught exceptions but hide AWT warnings
+        UncaughtExceptionHandler handler = (Thread t, Throwable e) -> {
+            //suppress AWT warnings
+            if(!e.getMessage().contains("AWT")) {
+                System.err.println(e.getMessage());
+            }
+        };
+        Thread.setDefaultUncaughtExceptionHandler(handler);
+    }
+    
+    /**
+     * Initiate the MVC JHop components
+     */
+    private void initMVC() {
+        view = new JHopView();
         Model.observer = view;
         Controller btnController = new JHopButtonController(view);
         Controller lstController = new JHopListController(view);
         btnController.link();
         lstController.link();
-        
-        //Display view
+    }
+    
+    /**
+     * Initiate this instances window frame
+     */
+    private void initWindow() {
         window = new JFrame();
         window.getContentPane().add(view);
         window.addWindowListener(new WindowAdapter() {
@@ -47,10 +74,13 @@ public class JHop{
             }
         });
         
-        window.setSize(JHopView.DEFAULT_WIDTH, JHopView.DEFAULT_HEIGHT);
-        window.setVisible(true);
+        window.setSize(JHopViewConstants.DEFAULT_WIDTH, JHopViewConstants.DEFAULT_HEIGHT);
+        window.setTitle("JHop");
     }
     
+    /**
+     * @return The active JHop GUI window
+     */
     public static JFrame getActiveWindow() {
         return window;
     }

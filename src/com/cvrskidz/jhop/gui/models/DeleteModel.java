@@ -5,6 +5,7 @@ import com.cvrskidz.jhop.exceptions.CommandException;
 import com.cvrskidz.jhop.executables.Executable;
 import com.cvrskidz.jhop.gui.view.JHopDetailsView;
 import com.cvrskidz.jhop.gui.view.JHopView;
+import com.cvrskidz.jhop.gui.view.JHopViewConstants;
 import com.cvrskidz.jhop.indexes.Index;
 import java.util.ArrayList;
 
@@ -43,7 +44,7 @@ public class DeleteModel extends Model {
             JHopDetailsView sideBar = Model.observer.getSideBar();
             sideBar.removeIndex(name);
             if(replace) {
-                sideBar.setIndexName(JHopView.DEFAULT_NAME);
+                sideBar.setIndexName(JHopViewConstants.DEFAULT_NAME);
                 sideBar.clearPages();
             }
         }

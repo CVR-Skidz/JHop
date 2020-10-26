@@ -28,7 +28,7 @@ public abstract class HTMLParser<E> implements Parser<E>{
     
     // The realtive path of the configuration file specifiying applicable
     // tags to parse.
-    public static final String PATH = "include";
+    public static final String PATH = "config/include";
     
     public HTMLParser(String html, String attribute, String value) {
         dom = Jsoup.parse(html);

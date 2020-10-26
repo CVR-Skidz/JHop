@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+    Hibernate configuration file
+    Adapted from the "Basic" hibernate template found at: 
+    https://docs.jboss.org/hibernate/orm/current/quickstart/html_single/
+-->
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Connection setup -->
+        <property name="connection.dirver_class">org.apache.derby.jdbc.EmbeddedDriver</property>
+        <property name="connection.url">jdbc:derby:db\JhopIndexes</property>
+        <property name="connection.username">root</property>
+        <property name="connection.password">root</property>
+
+        <!-- Allow only one JDBC connection at a time -->
+        <property name="connection.pool_size">1</property>
+        
+        <!-- Disable the second-level cache  -->
+        <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="show_sql">false</property>
+
+        <!-- Drop and re-create the database schema on startup -->
+        <!--<property name="hbm2ddl.auto">create</property>-->
+
+        <!-- Entity mapping for indexes -->
+        <mapping resource="com/cvrskidz/jhop/db/Indexes.hbm.xml"/>
+    </session-factory>
+</hibernate-configuration>
+

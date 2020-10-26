@@ -9,6 +9,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,6 +25,7 @@ import javax.swing.JTextField;
 public class JHopWebView extends JPanel{
     private JHopSwitchPanel content;
     private JList<IndexEntry> results;
+    private JLabel status;
     private JFXPanel document;
     private WebEngine engine;
     private JTextField searchInput;
@@ -36,7 +38,7 @@ public class JHopWebView extends JPanel{
         populateCanvas();
 
         //start on results
-        content.switchTo(JHopView.RESULTS_LABEL);
+        content.switchTo(JHopViewConstants.RESULTS_LABEL);
     }
 
     /**
@@ -47,7 +49,8 @@ public class JHopWebView extends JPanel{
         results = new JList<>(new DefaultListModel());
         document = new JFXPanel();
         searchInput = new JTextField();
-        searchButton = new JButton(JHopView.SEARCH_LABEL);
+        searchButton = new JButton(JHopViewConstants.SEARCH_LABEL);
+        status = new JLabel(JHopViewConstants.DEFAULT_NAME);
     }
 
     /**
@@ -55,10 +58,11 @@ public class JHopWebView extends JPanel{
      */
     private void populateCanvas() {
         JScrollPane resultsWrapper = new JScrollPane(results);
-        content.addView(resultsWrapper, JHopView.RESULTS_LABEL);
-        content.addView(document, JHopView.DOC_LABEL);
+        content.addView(resultsWrapper, JHopViewConstants.RESULTS_LABEL);
+        content.addView(document, JHopViewConstants.DOC_LABEL);
 
         add(content, BorderLayout.CENTER);
+        add(status, BorderLayout.SOUTH);
         //creates web engine one JavaFX thread
         Platform.runLater((Runnable)()->{
             document.setScene(createWebView());
@@ -145,5 +149,14 @@ public class JHopWebView extends JPanel{
      */
     public JHopSwitchPanel getCanvas() {
         return content;
+    }
+    
+    /**
+     * Displays the number of results returned by a search.
+     * 
+     * @param n The number of results.
+     */
+    public void setStatus(Integer n) {
+        status.setText(n + " results");
     }
 }

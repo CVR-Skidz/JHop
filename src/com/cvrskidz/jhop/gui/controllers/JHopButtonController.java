@@ -8,8 +8,13 @@ import com.cvrskidz.jhop.gui.models.SearchModel;
 import com.cvrskidz.jhop.gui.view.JHopDetailsView;
 import com.cvrskidz.jhop.gui.view.JHopOptionsDialog;
 import com.cvrskidz.jhop.gui.view.JHopView;
+import com.cvrskidz.jhop.gui.view.JHopViewConstants;
 import com.cvrskidz.jhop.gui.view.JHopWebView;
 import java.awt.event.ActionListener;
+import java.awt.Desktop;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +45,7 @@ public class JHopButtonController extends JHopController{
         linkAddButton((JHopView)view);
         linkDropButton((JHopView)view);
         linkSearchButton((JHopView)view);
+        linkHelpButton((JHopView)view);
     }
     
     /**
@@ -144,5 +150,26 @@ public class JHopButtonController extends JHopController{
         };
         
         search.addActionListener(response);
+    }
+    
+    /**
+     * Link the "help" button in a default view to an event that opens the help page.
+     * 
+     * @param view The given view of the JHop GUI.
+     */ 
+    private void linkHelpButton(JHopView view) {
+        JHopDetailsView menu = view.getSideBar();
+        JButton help = menu.getHelpControl();
+        
+        ActionListener response = (ActionListener)(event) -> {
+            try {
+                Desktop.getDesktop().browse(new URI(JHopViewConstants.HELP_URL));
+            }
+            catch (IOException | URISyntaxException e) {
+                view.showError(e.getMessage());
+            }
+        };
+        
+        help.addActionListener(response);
     }
 }

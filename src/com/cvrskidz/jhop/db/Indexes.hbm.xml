@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!--
+    Hibernate persistence mapping
+
+    This file was adapted from "Event.hbm.xml" found at:
+    https://docs.jboss.org/hibernate/orm/current/quickstart/html_single/
+    
+    This file maps all object within ...jhop.db to the JHop database.
+-->
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-mapping package="com.cvrskidz.jhop.db">
+    <class name="Term" table="TERM">
+        <composite-id>
+            <key-property name="page"/>
+            <key-property name="term"/>
+        </composite-id>
+        <property name="indexName" column="INDEX_NAME"/>
+        <property name="frequency"/>
+    </class>
+    
+    <class name="Page" table="PAGE">
+        <composite-id >
+            <key-property name="url"/>
+            <key-property name="indexName" column="INDEX_NAME"/>
+        </composite-id>
+        <property name="src"/>
+        <property name="title"/>
+    </class>
+    
+    <class name="IndexLog" table="DIRECTORY">
+        <id name="indexName" column="INDEX_NAME">
+            <generator class="assigned"/>
+        </id>
+        <property name="tag" column="TAG_ATTRIBUTE"/>
+        <property name="attribute" column="ATTRIBUTE_VALUE"/>
+    </class>
+</hibernate-mapping>

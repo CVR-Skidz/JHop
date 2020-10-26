@@ -4,6 +4,7 @@ import com.cvrskidz.jhop.gui.models.LoadModel;
 import com.cvrskidz.jhop.gui.models.Model;
 import com.cvrskidz.jhop.gui.view.JHopDetailsView;
 import com.cvrskidz.jhop.gui.view.JHopView;
+import com.cvrskidz.jhop.gui.view.JHopViewConstants;
 import com.cvrskidz.jhop.gui.view.JHopWebView;
 import javax.swing.JList;
 import javax.swing.event.ListSelectionListener;
@@ -68,7 +69,7 @@ public class JHopListController extends JHopController{
         JList<IndexEntry> results = webView.getResultList();
         
         ListSelectionListener response = (ListSelectionListener)(e)->{
-            webView.getCanvas().switchTo(JHopView.DOC_LABEL);
+            webView.getCanvas().switchTo(JHopViewConstants.DOC_LABEL);
             IndexEntry page = results.getSelectedValue();
             
             // load if page is valid

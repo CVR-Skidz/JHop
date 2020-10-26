@@ -33,7 +33,7 @@ public class JHopDetailsView extends JHopSwitchPanel{
     private JList<String> indexes, availablePages;
     private JPanel controls;
     private JScrollPane pageWrapper;
-    private JButton add, drop, show, hide;
+    private JButton add, drop, show, hide, help;
     private JProgressBar progress;
     
     public JHopDetailsView() {
@@ -57,10 +57,12 @@ public class JHopDetailsView extends JHopSwitchPanel{
         
         //buttons and index controls
         controls = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        add = new JButton(JHopView.ADD_LABEL);
-        drop = new JButton(JHopView.DROP_LABEL);
-        show = new JButton(JHopView.SHOW_LABEL);
-        hide = new JButton(JHopView.HIDE_LABEL);
+        add = new JButton(JHopViewConstants.ADD_LABEL);
+        drop = new JButton(JHopViewConstants.DROP_LABEL);
+        show = new JButton(JHopViewConstants.SHOW_LABEL);
+        hide = new JButton(JHopViewConstants.HIDE_LABEL);
+        help = new JButton(JHopViewConstants.HELP_LABEL);
+        
         progress = new JProgressBar();
     }
     
@@ -79,6 +81,7 @@ public class JHopDetailsView extends JHopSwitchPanel{
         
         //index controls
         controls.add(progress);
+        controls.add(help);
         controls.add(add);
         controls.add(drop);
         
@@ -94,7 +97,7 @@ public class JHopDetailsView extends JHopSwitchPanel{
     private void populateLower() {
         //active index info
         pageWrapper = new JScrollPane(availablePages);
-        Border title = BorderFactory.createTitledBorder(JHopView.DEFAULT_NAME);
+        Border title = BorderFactory.createTitledBorder(JHopViewConstants.DEFAULT_NAME);
         pageWrapper.setBorder(title);
         visible.addChild(pageWrapper);
     }
@@ -134,6 +137,13 @@ public class JHopDetailsView extends JHopSwitchPanel{
      */
     public JButton getHideControl() {
         return hide;
+    }
+
+    /**
+     * @return The control used to launch help.
+     */
+    public JButton getHelpControl() {
+        return help;
     }
     
     /**

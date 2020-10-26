@@ -11,7 +11,7 @@ import java.util.List;
  * @author cvrskidz 18031335
  */
 public abstract class IndexOperation extends Operation{
-    public static final String PATH = "sets";
+    public static final String PATH = "config/sets";
     protected String indexName;
     protected static final int ARGC = 1;
     
