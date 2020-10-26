@@ -4,9 +4,9 @@
 JHop (Java Hop Engine) is an experimental search engine. JHop fulfills the following three operations which I the author consider 
 qualify JHop as a search engine:
 
-	1. Information Acquisition - Web Crawling
-	2. Indexing & Ranking
-	3. Information Retrieval - Searching and displaying web pages
+1. Information Acquisition - Web Crawling
+2. Indexing & Ranking
+3. Information Retrieval - Searching and displaying web pages
 
 JHop allows a user to build individual indexes to seperate information, as opposed to searching one cumulative index. Using JHop 
 requires the user to instruct JHop to cary out each operation - that is to crawl, index, and search. This can be done through the GUI, or command line
@@ -59,12 +59,14 @@ appropriate query for the target domain.
 
 A query consits of an attribute and value. For instance the following element has an attribute of id and a value of content:
 
+```
 <div id="content"> </div>
+```
 
 A query identifies the element to start crawling from, and only elements that are listed in './include' or match the given query
 are included in the crawl. A crawl will stop following a branch of elements in the DOM when both conditions are false.
 
-For example given the following response the lines marked with *'s will be crawled:
+For example given the following response the lines marked with \*'s will be crawled:
 
 Query = class,content
 
@@ -106,17 +108,17 @@ In general an easy way to create a query is as follows:
 
 A few example indexes have been supplied with JHop, they are described below:
 
-	- Coronavirus: extracts from wikipedia pages related to Coronavirus(es).
-	- Java Layout Managers: extracts from the Java documentation on Swing and AWT layout managers.
+- Coronavirus: extracts from wikipedia pages related to Coronavirus(es).
+- Java Layout Managers: extracts from the Java documentation on Swing and AWT layout managers.
 
 To test the functionality of JHop the following is an example query to index the python 3 documentation at the time of writing:
 
-	- URL: 		https://docs.python.org/3/library/array
-	- Attribute: 	class
-	- Value:	section
-	- Limit: 	{Up to the user, recommended: 5-20}
+- URL: 		https://docs.python.org/3/library/array
+- Attribute: 	class
+- Value:	section
+- Limit: 	{Up to the user, recommended: 5-20}
 
-*A note on code blocks: <code> and <pre> tags are not included in the default tag list as many webpages contain duplicate text
+*A note on code blocks: `<code>` and `<pre>` tags are not included in the default tag list as many webpages contain duplicate text
 content when they are included. However if you would like to view code blocks add the relevant tage to the `include` file, that
 is pre or code (most likely both)*
 
