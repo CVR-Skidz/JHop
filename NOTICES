@@ -1,0 +1,10 @@
+JHop uses open source libraries (found in `lib`) provided by other authors. This includes:
+
+- Apache Derby: Apache License 2.0
+- JSoup: MIT License
+- Junit: Eclipse Public License 2.0
+- Hibernate ORM: LGPL 2.1
+
+A copy of each of these licenses is attached under licenses, and were appropriate under NOTICES.
+
+This software is distributed "as is" and comes with no warranty.
